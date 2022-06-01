@@ -2,14 +2,17 @@
 %2345678901234567890123456789012345678901234567890123456789012345678901234567890
 %        1         2         3         4         5         6         7         8
 
-\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out if you need a4paper
+% Comment this line out if you need a4paper
+\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  
 
-%\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4 paper
+% Use this line for a4 paper
+%\documentclass[a4paper, 10pt, conference]{ieeeconf}
 
-\IEEEoverridecommandlockouts                              % This command is only needed if 
-                                                          % you want to use the \thanks command
+% This command is only needed if you want to use the \thanks command
+\IEEEoverridecommandlockouts
 
-\overrideIEEEmargins                                      % Needed to meet printer requirements.
+% Needed to meet printer requirements.
+\overrideIEEEmargins
 
 %In case you encounter the following error:
 %Error 1010 The PDF file may be corrupt (unable to open PDF file) OR
@@ -39,7 +42,7 @@
 \newtheorem{remark}{Remark}
 
 \title{\LARGE \bf
-Preparation of Papers for IEEE Sponsored Conferences \& Symposia*
+Encrypted Fast Covariance Intersection on the Cloud Without Leaking Weights
 }
 
 \author{Marko Ristic$^{1}$ and Benjamin Noack$^{1}$% <-this % stops a space
@@ -51,7 +54,6 @@ Preparation of Papers for IEEE Sponsored Conferences \& Symposia*
 \maketitle
 \thispagestyle{empty}
 \pagestyle{empty}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
@@ -67,18 +69,133 @@ Preparation of Papers for IEEE Sponsored Conferences \& Symposia*
 %                                    
 %                                    
 % 
-
 \begin{abstract}
 
 Abstract
 
 \end{abstract}
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% 
+% 8888888 888b    888 88888888888 8888888b.   .d88888b.  
+%   888   8888b   888     888     888   Y88b d88P" "Y88b 
+%   888   88888b  888     888     888    888 888     888 
+%   888   888Y88b 888     888     888   d88P 888     888 
+%   888   888 Y88b888     888     8888888P"  888     888 
+%   888   888  Y88888     888     888 T88b   888     888 
+%   888   888   Y8888     888     888  T88b  Y88b. .d88P 
+% 8888888 888    Y888     888     888   T88b  "Y88888P"  
+%                                                        
+%                                                        
+%                                                        
+% 
 \section{Introduction}
 
+
+% 
+% 8888888b.  8888888b.   .d88888b.  888888b.   
+% 888   Y88b 888   Y88b d88P" "Y88b 888  "88b  
+% 888    888 888    888 888     888 888  .88P  
+% 888   d88P 888   d88P 888     888 8888888K.  
+% 8888888P"  8888888P"  888     888 888  "Y88b 
+% 888        888 T88b   888     888 888    888 
+% 888        888  T88b  Y88b. .d88P 888   d88P 
+% 888        888   T88b  "Y88888P"  8888888P"  
+%                                              
+%                                              
+%                                              
+% 
+\section{Problem Statement}
+
+
+% 
+% 8888888b.  8888888b.  8888888888 888      8888888 888b     d888 
+% 888   Y88b 888   Y88b 888        888        888   8888b   d8888 
+% 888    888 888    888 888        888        888   88888b.d88888 
+% 888   d88P 888   d88P 8888888    888        888   888Y88888P888 
+% 8888888P"  8888888P"  888        888        888   888 Y888P 888 
+% 888        888 T88b   888        888        888   888  Y8P  888 
+% 888        888  T88b  888        888        888   888   "   888 
+% 888        888   T88b 8888888888 88888888 8888888 888       888 
+%                                                                 
+%                                                                 
+%                                                                 
+% 
+\section{Preliminaries}
+
+\subsection{Fast Covariance Intersection}
+
+\subsection{Paillier Encryption Scheme}
+
+\subsection{Integer Encoding for Homomorphic Encryption}
+
+
+% 
+% 888b     d888 8888888888 88888888888 888    888  .d88888b.  8888888b.  
+% 8888b   d8888 888            888     888    888 d88P" "Y88b 888  "Y88b 
+% 88888b.d88888 888            888     888    888 888     888 888    888 
+% 888Y88888P888 8888888        888     8888888888 888     888 888    888 
+% 888 Y888P 888 888            888     888    888 888     888 888    888 
+% 888  Y8P  888 888            888     888    888 888     888 888    888 
+% 888   "   888 888            888     888    888 Y88b. .d88P 888  .d88P 
+% 888       888 8888888888     888     888    888  "Y88888P"  8888888P"  
+%                                                                        
+%                                                                        
+%                                                                        
+% 
+\section{Encrypted Fast Covariance Intersection}
+
+
+% 
+%  .d8888b.  8888888888 .d8888b.  
+% d88P  Y88b 888       d88P  Y88b 
+% Y88b.      888       888    888 
+%  "Y888b.   8888888   888        
+%     "Y88b. 888       888        
+%       "888 888       888    888 
+% Y88b  d88P 888       Y88b  d88P 
+%  "Y8888P"  8888888888 "Y8888P"  
+%                                 
+%                                 
+%                                 
+% 
+\section{Security Analysis}
+
+
+% 
+%  .d8888b. 8888888 888b     d888 
+% d88P  Y88b  888   8888b   d8888 
+% Y88b.       888   88888b.d88888 
+%  "Y888b.    888   888Y88888P888 
+%     "Y88b.  888   888 Y888P 888 
+%       "888  888   888  Y8P  888 
+% Y88b  d88P  888   888   "   888 
+%  "Y8888P" 8888888 888       888 
+%                                 
+%                                 
+%                                 
+% 
+\section{Simulation and Results}
+
+
+% 
+%  .d8888b.   .d88888b.  888b    888  .d8888b.  
+% d88P  Y88b d88P" "Y88b 8888b   888 d88P  Y88b 
+% 888    888 888     888 88888b  888 888    888 
+% 888        888     888 888Y88b 888 888        
+% 888        888     888 888 Y88b888 888        
+% 888    888 888     888 888  Y88888 888    888 
+% Y88b  d88P Y88b. .d88P 888   Y8888 Y88b  d88P 
+%  "Y8888P"   "Y88888P"  888    Y888  "Y8888P"  
+%                                               
+%                                               
+%                                               
+% 
+\section{Conclusion}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % This command serves to balance the column lengths
 % on the last page of the document manually. It shortens
@@ -87,20 +204,6 @@ Abstract
 % so it should come on the page before the last. Make
 % sure that you do not shorten the textheight too much.
 %\addtolength{\textheight}{-11.05cm}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%\section*{APPENDIX}
-
-%\section*{ACKNOWLEDGMENT}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -117,7 +220,6 @@ Abstract
 %                                            
 %                                            
 % 
-
 \bibliographystyle{IEEEtran}
 \bibliography{bibliography/PrivilegedFusion}
 
