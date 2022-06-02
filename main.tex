@@ -88,7 +88,15 @@ Encrypted Fast Covariance Intersection on the Cloud Without Leaking Weights
 %                                                        
 %                                                        
 % 
-\section{Introduction}
+\section{Introduction}\label{sec:introduction}
+Data fusion and distributed state estimation have long been active fields of research and continue to find many applications in modern systems today []. Methods relying on the Kalman filter and derivatives [] have become particularly prevalent in this area due to their recursive structure and suitability to modelling estimate cross-correlations typically required for data fusion []. The handling of these cross-correlations is especially important when consistent or optimal fusion is desired [] and presents a key challenge in data fusion when they are not known in advance. To overcome this, some methods propagate cross-correlations through time at the cost of repeated reconstruction [] and typically add local computational complexity. Alternative methods approximate error cross-correlations with conservative suboptimal estimates to provide consistent fusion instead []. One such popular method is Covariance Intersection [] and it computationally inexpensive approximation, Fast Covariance Intersection []. These methods minimise fusion estimate error given possible conservative estimates and are popular due to their compatibility with the information form of the Kalman filter []. 
+
+While effective and often efficient, these data fusion solutions have traditionally been performed on closed networks with trusted participants and inherently imply a trust between sensors and estimators. In recent years, the ubiquity of distributed public networks has seen the additional challenges of security and privacy become increasingly relevant in distributed sensing environments and has led to an active field of reserach in providing security during data processing and fusion tasks [].
+
+
+
+
+\subsection{Notation}
 
 
 % 
@@ -104,7 +112,7 @@ Encrypted Fast Covariance Intersection on the Cloud Without Leaking Weights
 %                                              
 %                                              
 % 
-\section{Problem Statement}
+\section{Problem Statement}\label{sec:problem}
 
 
 % 
@@ -120,13 +128,13 @@ Encrypted Fast Covariance Intersection on the Cloud Without Leaking Weights
 %                                                                 
 %                                                                 
 % 
-\section{Preliminaries}
+\section{Preliminaries}\label{sec:prelims}
 
-\subsection{Fast Covariance Intersection}
+\subsection{Fast Covariance Intersection}\label{subsec:fci}
 
-\subsection{Paillier Encryption Scheme}
+\subsection{Paillier Encryption Scheme}\label{subsec:paillier}
 
-\subsection{Integer Encoding for Homomorphic Encryption}
+\subsection{Integer Encoding for Homomorphic Encryption}\label{subsec:encoding}
 
 
 % 
@@ -142,7 +150,7 @@ Encrypted Fast Covariance Intersection on the Cloud Without Leaking Weights
 %                                                                        
 %                                                                        
 % 
-\section{Encrypted Fast Covariance Intersection}
+\section{Encrypted Fast Covariance Intersection}\label{sec:encrypted_fci}
 
 
 % 
@@ -158,7 +166,7 @@ Encrypted Fast Covariance Intersection on the Cloud Without Leaking Weights
 %                                 
 %                                 
 % 
-\section{Security Analysis}
+\section{Security Analysis}\label{sec:security}
 
 
 % 
@@ -174,7 +182,7 @@ Encrypted Fast Covariance Intersection on the Cloud Without Leaking Weights
 %                                 
 %                                 
 % 
-\section{Simulation and Results}
+\section{Simulation and Results}\label{sec:simulation}
 
 
 % 
@@ -190,7 +198,7 @@ Encrypted Fast Covariance Intersection on the Cloud Without Leaking Weights
 %                                               
 %                                               
 % 
-\section{Conclusion}
+\section{Conclusion}\label{sec:conclusion}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
