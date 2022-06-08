@@ -91,7 +91,21 @@ Encrypted Fast Covariance Intersection on the Cloud Without Leaking Weights
 \section{Introduction}\label{sec:introduction}
 Data fusion and distributed state estimation have long been active fields of research and continue to find many applications in modern systems today []. Methods relying on the Kalman filter and derivatives [] have become particularly prevalent in this area due to their recursive structure and suitability to modelling estimate cross-correlations typically required for data fusion []. The handling of these cross-correlations is especially important when consistent or optimal fusion is desired [] and presents a key challenge in data fusion when they are not known in advance. To overcome this, some methods propagate cross-correlations through time at the cost of repeated reconstruction [] and typically add local computational complexity. Alternative methods approximate error cross-correlations with conservative suboptimal estimates to provide consistent fusion instead []. One such popular method is Covariance Intersection [] and it computationally inexpensive approximation, Fast Covariance Intersection []. These methods minimise fusion estimate error given possible conservative estimates and are popular due to their compatibility with the information form of the Kalman filter []. 
 
-While effective and often efficient, these data fusion solutions have traditionally been performed on closed networks with trusted participants and inherently imply a trust between sensors and estimators. In recent years, the ubiquity of distributed public networks has seen the additional challenges of security and privacy become increasingly relevant in distributed sensing environments and has led to an active field of reserach in providing security during data processing and fusion tasks [].
+While effective and often efficient, these data fusion solutions have traditionally been performed on closed networks with trusted participants and inherently imply a trust between sensors and estimators. In recent years, the ubiquity of distributed public networks has seen the additional challenges of security and privacy become increasingly relevant in distributed sensing environments and has led to an active field of reserach in providing security during data processing and fusion tasks []. While ensuring transimitted information is kept secret from eavesdroppers on untrusted networks is achievable with common private and public key encryption schemes [], tasks involving untrusted participants during computations present a greater challenge. Here, partial computations on encrypted data or the leakage of intermediate results are often required for arriving at the final result []. One common tool for achieving these requirements is homomorphic encryption [] which allows operations to be computed on encrypted numbers without decryption. The Pailler encryption scheme [] allows homomorphic addition and is a frequent choice in fusion application due to its applicability, simplicity and provable security. In [], the Paillier scheme is used to perform non-Bayesian localisation with range-sensors without disclosing individual sensor locations or measurements, while in [], similar security is achieved in a Bayesian setting when measurements are linear and sensors form a heirarchical network.
+
+[] presents a solution to computing model-predictive-control control inputs 
+
+
+In some cases, combinations of encryption schemes are used to achieve more complicated goals such as [], where a
+
+
+combinations used as well that introduce leakage [secfci,alexandru]
+
+
+This work considers the same problem presented in [], but presents an alternative solution which
+
+
+In section ...
 
 
 
