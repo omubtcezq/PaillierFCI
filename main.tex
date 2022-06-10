@@ -115,7 +115,11 @@ Section~\ref{sec:problem} introduces the formal data fusion and security goals a
 %                                              
 % 
 \section{Problem Statement}\label{sec:problem}
+In this work, we consider an arbitrary time-varying process defined by its state $\vec{x}_k \in \mathbb{R}^n$ for all timesteps $k \in \mathbb{N}$. This process is estimated by $m$ individual estimators $i$, $1\leq i\leq m$, each producing an estimate $\hat{\vec{x}}_{k,i}$ and an estimate error covariance $\mat{P}_{k,i}$ for every timestep $k$.
 
+Our aim at every timestep is for all estimates $\hat{\vec{x}}_{k,i}$ and errors $\mat{P}_{k,i}$, $1\leq i\leq m$, to be sent to a cloud server where a fused estimate $\hat{\vec{x}}_k$ and its error covariance $\mat{P}_k$ are computed.
+
+%security desired
 
 % 
 % 8888888b.  8888888b.  8888888888 888      8888888 888b     d888 
