@@ -98,7 +98,7 @@ In this work, we consider stochastic state estimate fusion on an untrusted cloud
 Section~\ref{sec:problem} introduces the formal data fusion and security goals and section~\ref{sec:prelims} gives relevant preliminaries. Section~\ref{sec:encrypted_fci} introduces our method, before sections~\ref{sec:security} and \ref{sec:simulation} analyse its security and simulation results, respectively. Concluding remarks and future work are discussed in section~\ref{sec:conclusion}.
 
 \subsection{Notation}
-% TODO fill
+% TODO fill after prelims
 
 
 % 
@@ -162,7 +162,31 @@ at each timestep $k$. In FCI, these weights are computed non-iteratively, as
 \end{equation}
 
 \subsection{Paillier Encryption Scheme}\label{subsec:paillier}
+The Paillier encryption scheme \cite{paillierPublicKeyCryptosystemsBased1999,katzIntroductionModernCryptography2008} is an additively homomorphic encryption scheme meeting the IND-CPA security notion. Key generation of the scheme is performed by choosing two sufficiently large primes of equal bit length, $p$ and $q$, and computing $N=pq$. The public key is defined by $\mathsf{pk} \triangleq N$ and the private key by $\mathsf{sk} \triangleq (p,q)$.
 
+Encryption of a plaintext message $a \in \mathbb{Z}_N$, resulting in a ciphertext $\mathcal{E}_\mathsf{pk}(a) \in \mathbb{Z}^*_{N^2}$, is computed by
+\begin{equation}
+    \mathcal{E}_\mathsf{pk}(a) = (N+1)^a r^N \pmod{N^2}
+\end{equation}
+with a randomly chosen $r \in \mathbb{Z}_N$. Decryption of the ciphertext is computed by
+\begin{equation}
+    \mathcal{D}_\mathsf{sk}(\mathcal{E}_\mathsf{pk}(a)) = \frac{L\left(\mathcal{E}_\mathsf{pk}(a)^\lambda \pmod{N^2}\right)}{L\left((N+1)^\lambda \pmod{N^2}\right)}\pmod{N}
+\end{equation}
+where $\lambda = \mathsf{lcm}(p-1,q-1)$ and $L(u)=\frac{u-1}{N}$. In addition to encryption and decryption, the following homomorphic properties are provided by the Paillier encryption scheme. $\forall a_1,a_2 \in \mathbb{Z}_N$,
+\begin{align}
+    \begin{split}
+        \mathcal{D}_\mathsf{sk}(\mathcal{E}_\mathsf{pk}(a_1)\mathcal{E}_\mathsf{pk}(a_2) & \pmod{N^2})\\
+        &\qquad= a_1+a_2 \pmod{N}\,,
+    \end{split}\\
+    \begin{split}
+        \mathcal{D}_\mathsf{sk}(\mathcal{E}_\mathsf{pk}(a_1)(N+1)^{a_2} & \pmod{N^2})\\
+        &\qquad= a_1+a_2\pmod{N}\,,
+    \end{split}\\
+    \begin{split}
+        \mathcal{D}_\mathsf{sk}(\mathcal{E}_\mathsf{pk}(a_1)^{a_2} & \pmod{N^2})\\
+        &\qquad= a_1a_2 \pmod{N}\,.
+    \end{split}
+\end{align}
 
 \subsection{Integer Encoding for Homomorphic Encryption}\label{subsec:encoding}
 
