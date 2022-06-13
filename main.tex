@@ -144,9 +144,25 @@ Simulataneously, we consider the desired security of the fusion process. The fus
 When proposing our solution in section \ref{sec:encrypted_fci}, we make use of the Fast Covariance Intersection algorithm, the Paillier homomorphic encryption scheme and a common integer encoding for floating-point numbers. These preliminaries are summarised below.
 
 \subsection{Fast Covariance Intersection}\label{subsec:fci}
-
+The Fast Covariance Intersection (FCI) algorithm \cite{niehsenInformationFusionBased2002} provides a consistent suboptimal fusion of estimates in the form \eqref{eqn:ests_and_covs} when cross-correlations between the measurements are not known, providing a fast, non-iterative and general solution. Fusion is given by
+\begin{equation}
+    \mat{P}_{k,\mathsf{fus}} = \left(\sum_{i=1}^m\omega_{k,i}\mat{P}_{k,i}^{-1}\right)^{-1}
+\end{equation}
+and
+\begin{equation}
+    \hat{\vec{x}}_{k,\mathsf{fus}} = \mat{P}_{k,\mathsf{fus}}\sum_{i=1}^m\omega_{k,i}\mat{P}_{k,i}^{-1}\hat{\vec{x}}_{k,i}\,,
+\end{equation}
+with positive fusion weights $\omega_{k,i} \in \mathbb{R}^{+}$, $1\leq i \leq m$, such that 
+\begin{equation}
+    \sum_{i=1}^m\omega_{k,i}=1
+\end{equation}
+at each timestep $k$. In FCI, these weights are computed non-iteratively, as
+\begin{equation}
+    \omega_{k,i} = \frac{1/\tr(\mat{P}_{k,i})}{\sum_{i=1}^m 1/\tr(\mat{P}_{k,i})}\,.
+\end{equation}
 
 \subsection{Paillier Encryption Scheme}\label{subsec:paillier}
+
 
 \subsection{Integer Encoding for Homomorphic Encryption}\label{subsec:encoding}
 
