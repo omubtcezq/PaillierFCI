@@ -98,8 +98,7 @@ In this work, we consider stochastic state estimate fusion on an untrusted cloud
 Section~\ref{sec:problem} introduces the formal data fusion and security goals and section~\ref{sec:prelims} gives relevant preliminaries. Section~\ref{sec:encrypted_fci} introduces our method, before sections~\ref{sec:security} and \ref{sec:simulation} analyse its security and simulation results, respectively. Concluding remarks and future work are discussed in section~\ref{sec:conclusion}.
 
 \subsection{Notation}
-% TODO fill after prelims
-
+Throughout this work, the following notation is used. Plain characters, $a$, denote scalars, underlined lowercase characters, $\vec{b}$, denote vectors and uppercase bold characters, $\mat{C}$, denote matrices. $\mat{C}^{-1}$ denotes the matrix inverse and $\tr(\mat{C})$ the matrix trace. Encryption with a public key $\mathsf{pk}$ is denoted $\mathcal{E}_{\mathsf{pk}}(\cdot)$ and decryption with a private key $\mathsf{sk}$ is denotes $\mathcal{D}_{\mathsf{sk}}(\cdot)$, while encoding and decoding with parameters $M$ and $\phi$ are denoted $\mathsf{E}_{m,\phi}(\cdot)$ and $\mathsf{E}^{-1}_{m,\phi}(\cdot)$, respectively.
 
 % 
 % 8888888b.  8888888b.   .d88888b.  888888b.   
@@ -174,11 +173,11 @@ with a randomly chosen $r \in \mathbb{Z}_N$. Decryption of the ciphertext is com
 \end{equation}
 where $\lambda = \mathsf{lcm}(p-1,q-1)$ and $L(u)=\frac{u-1}{N}$. In addition to encryption and decryption, the following homomorphic properties are provided by the Paillier encryption scheme. $\forall a_1,a_2 \in \mathbb{Z}_N$,
 \begin{align}
-    \begin{split}
+    \begin{split}\label{eqn:paillier_add}
         \mathcal{D}_\mathsf{sk}(\mathcal{E}_\mathsf{pk}(a_1)\mathcal{E}_\mathsf{pk}(a_2) & \pmod{N^2})\\
         &\qquad= a_1+a_2 \pmod{N}\,,
     \end{split}\\
-    \begin{split}
+    \begin{split}\label{eqn:paillier_add_known}
         \mathcal{D}_\mathsf{sk}(\mathcal{E}_\mathsf{pk}(a_1)(N+1)^{a_2} & \pmod{N^2})\\
         &\qquad= a_1+a_2\pmod{N}\,,
     \end{split}\\
@@ -189,7 +188,30 @@ where $\lambda = \mathsf{lcm}(p-1,q-1)$ and $L(u)=\frac{u-1}{N}$. In addition to
 \end{align}
 
 \subsection{Integer Encoding for Homomorphic Encryption}\label{subsec:encoding}
-
+As the Paillier scheme bounds inputs to $a\in \mathbb{Z}_N$, multidimensional real-valued state estimates and error covariances require a suitable integer mapping to allow for their encryption and to preserve homomorphic operations. We achieve this with elementwise encoding and encryption, and rely on a generalised Q number encoding \cite{oberstarFixedPointRepresentationFractional2007}. Parametrised by a range $M\in \mathbb{N}$ and a fractional precision $\phi \in \mathbb{N}$, the encoding of a number $x\in\mathbb{R}$ is given by
+\begin{equation}
+    \mathsf{E}_{M,\phi}(x) = \left\lfloor \phi x \right\rceil \pmod{M}\,,
+\end{equation}
+while decoding of an encoded number $u\in\mathbb{Z}_M$ is given by
+\begin{equation}
+    \mathsf{E}^{-1}_{M,\phi}(u) =
+    \begin{dcases}
+        \frac{u \hspace{-8pt}\pmod{M}}{\phi}, &u \hspace{-8pt}\pmod{M} \leq \left\lfloor\frac{M}{2}\right\rfloor \\
+        -\frac{M - u \hspace{-8pt}\pmod{M}}{\phi}, & \text{otherwise} \\
+    \end{dcases}.
+\end{equation}
+This encoding provides the homomorphic property
+\begin{equation}\label{eqn:encoding_add}
+    \begin{split}
+        \mathsf{E}_{M,\phi}(a_1) + \mathsf{E}_{M,\phi}(a_2)& \pmod{M} =\\
+        &\mathsf{E}_{M,\phi}(a_1+a_2)
+    \end{split}
+\end{equation}
+for $a_1,a_2\in\mathbb{R}$ when
+\begin{equation}\label{eqn:encoding_overflow_req}
+    \left|\phi(a_1+a_2)\right| < \left\lfloor \frac{M}{2} \right\rfloor\,.
+\end{equation}
+Here, we note that when $M=N$, \eqref{eqn:encoding_add} coincides with the Paillier homomorphic operations \eqref{eqn:paillier_add} and \eqref{eqn:paillier_add_known}, while when $N$ is very large ($N>2^{1024})$, \eqref{eqn:encoding_overflow_req} can generally be ignored.
 
 % 
 % 888b     d888 8888888888 88888888888 888    888  .d88888b.  8888888b.  
