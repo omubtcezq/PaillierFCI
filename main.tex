@@ -261,7 +261,7 @@ combine information from individual estimators $i$ and are computable homomorphi
     \State Estimate $\mat{P}_{k,i}$ locally
     \LineComment{Public key is encoding and encryption modulus}
     \State $N \gets \mathsf{pk}$
-    \LineComment{Compute scaling, covariance and estimate variables}
+    \LineComment{Encrypt scaling, covariance and estimate components}
     \State $s_{k,i} \gets \mathcal{E}_{\mathsf{pk}}\left(\mathsf{E}_{N,\phi}\left(\frac{1}{\tr(\mat{P}_{k,i})}\right)\right)$
     \State $\mat{C}_{k,i} \gets \mathcal{E}_{\mathsf{pk}}\left(\mathsf{E}_{N,\phi}\left(\frac{1}{\tr(\mat{P}_{k,i})}\mat{P}_{k,i}^{-1}\right)\right)$
     \State $\vec{e}_{k,i} \gets \mathcal{E}_{\mathsf{pk}}\left(\mathsf{E}_{N,\phi}\left(\frac{1}{\tr(\mat{P}_{k,i})}\mat{P}_{k,i}^{-1}\hat{\vec{x}}_{k,i}\right)\right)$
@@ -287,7 +287,7 @@ combine information from individual estimators $i$ and are computable homomorphi
 \caption{Fusion Query}\label{alg:fus_query}
 \begin{algorithmic}[1]
     \setstretch{1.35}
-    \Procedure{ObtainFusion}{$k$, $\mathsf{pk}$, $\mathsf{sk}$, $\phi$}
+    \Procedure{GetResult}{$k$, $\mathsf{pk}$, $\mathsf{sk}$, $\phi$}
     \State Query and receive $s_k$, $\mat{C}_k$ and $\vec{e}_k$ from fusing cloud
     \State $N \gets \mathsf{pk}$
     \State $\bar{s}_k \gets \left(\mathsf{E}^{-1}_{N,\phi}\left(\mathcal{D}_{\mathsf{sk}}\left(s_k\right)\right)\right)^{-1}$
@@ -314,9 +314,9 @@ Along with allowing the summations to be performed homomorphically on the cloud,
 %                                 
 % 
 \section{Security Analysis}\label{sec:security}
+The provable security of the method in section~\ref{sec:encrypted_fci} is relatively straight forward. Our aim for IND-CPA security of all information receieved by the cloud, sent by the estimators or observable by eavesdroppers is achieved by the homomorphic Paillier encryption scheme. Since all transmitted information is encrypted and the cloud, estimators and eavedropper do not hold the secret key $\mathsf{sk}$, IND-CPA is met at all parties.
 
-% TODO note that n is leaked and that we accept that
-
+We do, however, note an implicit assumption that is made when encrypting multidimensional data elementwise. While individual elements are indistinguishable, elementwise encryption does now encrypt the estimate dimension $n$, which remains implicitly public for all computations. While some methods that allow the complete homomorphic encryption of vectors do exist \cite{alexandruPrivateWeightedSum2020}, they are left for future work and considered beyond the scope of this work. Instead, we acknowledge the implicit leakage of state dimension $n$ and note that, while this may leak information about the fusion's use-case, state estimate values remain securely hidden.
 
 % 
 %  .d8888b. 8888888 888b     d888 
