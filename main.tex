@@ -29,6 +29,10 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 %\usepackage{amsthm} % Errors from \proof when used with this ieeeconf
+% Algorithms
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{setspace}
 % Local
 \usepackage{local_macros/isasmathmacros}
 
@@ -40,6 +44,9 @@
 %\theoremstyle{remark} % Doesn't exist when used with this ieeeconf
 %\newtheorem*{remark}{Remark} % Doesn't exist when used with this ieeeconf
 \newtheorem{remark}{Remark}
+
+% Algorithm settings
+\algnewcommand{\LineComment}[1]{\Statex \(\triangleright\) #1}
 
 \title{\LARGE \bf
 Encrypted Fast Covariance Intersection on the Cloud Without Leaking Weights
@@ -98,7 +105,7 @@ In this work, we consider stochastic state estimate fusion on an untrusted cloud
 Section~\ref{sec:problem} introduces the formal data fusion and security goals and section~\ref{sec:prelims} gives relevant preliminaries. Section~\ref{sec:encrypted_fci} introduces our method, before sections~\ref{sec:security} and \ref{sec:simulation} analyse its security and simulation results, respectively. Concluding remarks and future work are discussed in section~\ref{sec:conclusion}.
 
 \subsection{Notation}
-Throughout this work, the following notation is used. Plain characters, $a$, denote scalars, underlined lowercase characters, $\vec{b}$, denote vectors and uppercase bold characters, $\mat{C}$, denote matrices. $\mat{C}^{-1}$ denotes the matrix inverse and $\tr(\mat{C})$ the matrix trace. Encryption with a public key $\mathsf{pk}$ is denoted $\mathcal{E}_{\mathsf{pk}}(\cdot)$ and decryption with a private key $\mathsf{sk}$ is denotes $\mathcal{D}_{\mathsf{sk}}(\cdot)$, while encoding and decoding with parameters $M$ and $\phi$ are denoted $\mathsf{E}_{m,\phi}(\cdot)$ and $\mathsf{E}^{-1}_{m,\phi}(\cdot)$, respectively.
+Throughout this work, the following notation is used. Plain characters, $a$, denote scalars, underlined lowercase characters, $\vec{b}$, denote vectors and uppercase bold characters, $\mat{C}$, denote matrices. $\mat{C}^{-1}$ denotes the matrix inverse and $\tr(\mat{C})$ the matrix trace. Encryption with a public key $\mathsf{pk}$ is denoted $\mathcal{E}_{\mathsf{pk}}(\cdot)$ and decryption with a private key $\mathsf{sk}$ is denoted $\mathcal{D}_{\mathsf{sk}}(\cdot)$, while encoding and decoding with parameters $M$ and $\phi$ are denoted $\mathsf{E}_{M,\phi}(\cdot)$ and $\mathsf{E}^{-1}_{M,\phi}(\cdot)$, respectively. All encryption and encoding operations on vectors or matrices are performed elementwise and the expression $\otimes_{i=1}^{m}\mat{C}_i$ is used to denote elementwise multiplication for multidimensional data.
 
 % 
 % 8888888b.  8888888b.   .d88888b.  888888b.   
@@ -124,9 +131,7 @@ respectively, at every timestep $k$. Our aim at every timestep is for all estima
 \end{equation}
 respectively, are computed and are consistent with the estimates in \eqref{eqn:ests_and_covs}.
 
-Simulataneously, we consider the desired security of the fusion process. The fusing cloud and sensors are treated as \textit{honest-but-curious}, that is, they follow protocols correctly but may use learned information for malicious gain, and a trusted third party exists that can query the cloud at any timestep $k$ to obtain the fusion results in \eqref{eqn:fus_ests_and_covs}. To guarantee that no new information about estimates, \eqref{eqn:ests_and_covs}, and fusions, \eqref{eqn:fus_ests_and_covs}, can be learned by eavesdroppers, the cloud and the sensors, we aim for cryptographic \textit{Indistinguishability under the Chosen Plaintext Attack} (IND-CPA) \cite{katzIntroductionModernCryptography2008} for all transimitted and processed information. This is inline with common security goals in the field and suitable for homomorphic encryption.
-
-% TODO should say third party can't learn individual inputs beyond the fused result too
+Simulataneously, we consider the desired security of the fusion process. The fusing cloud and estimators are treated as \textit{honest-but-curious}, that is, they follow protocols correctly but may use learned information for malicious gain, and a trusted third party exists that can query the cloud at any timestep $k$ to obtain the fusion results in \eqref{eqn:fus_ests_and_covs}. We aim for the cloud, estimators and eavesdroppers to learn no additional information from observed estimates and fusions, \eqref{eqn:ests_and_covs} and \eqref{eqn:fus_ests_and_covs}, respectively, beyond their local estimates. To guarantee this, cryptographic \textit{Indistinguishability under the Chosen Plaintext Attack} (IND-CPA) \cite{katzIntroductionModernCryptography2008} is desired for all transimitted and processed information. This is inline with common security goals in the field and suitable for homomorphic encryption.
 
 % 
 % 8888888b.  8888888b.  8888888888 888      8888888 888b     d888 
@@ -142,7 +147,7 @@ Simulataneously, we consider the desired security of the fusion process. The fus
 %                                                                 
 % 
 \section{Preliminaries}\label{sec:prelims}
-When proposing our solution in section \ref{sec:encrypted_fci}, we make use of the Fast Covariance Intersection algorithm, the Paillier homomorphic encryption scheme and a common integer encoding for floating-point numbers. These preliminaries are summarised below.
+When proposing our solution in section~\ref{sec:encrypted_fci}, we make use of the Fast Covariance Intersection algorithm, the Paillier homomorphic encryption scheme and a common integer encoding for floating-point numbers. These preliminaries are summarised below.
 
 \subsection{Fast Covariance Intersection}\label{subsec:fci}
 The Fast Covariance Intersection (FCI) algorithm \cite{niehsenInformationFusionBased2002} provides a consistent suboptimal fusion of estimates in the form \eqref{eqn:ests_and_covs} when cross-correlations between the measurements are not known, providing a fast, non-iterative and general solution. Fusion is given by
@@ -246,12 +251,54 @@ In this form, innermost summations
         &\qquad\sum_{i=1}^m\frac{1}{\tr(\mat{P}_{k,i})}\mat{P}_{k,i}^{-1}\hat{\vec{x}}_{k,i}
     \end{split}
 \end{equation}
-combine information from individual estimators $i$ and are computable homomorphically given suitable encryptions. Since these sums can be computed from the final fusion results \eqref{eqn:ci_cov_fusion} and \eqref{eqn:ci_est_fusion}, they contain no additional information on individual estimator contributions than the results themselves and can be decrypted by the key-holding third party without affecting leakage. The remaining inversions and multiplications in \eqref{eqn:fci_cov_rearrange} and \eqref{eqn:fci_est_rearrange} can then be computed by the third party to obtain the final results.
+combine information from individual estimators $i$ and are computable homomorphically given suitable encryptions. Encryptions of these sums can then be decrypted by the key-holding third party, before remaining inversions and multiplications in \eqref{eqn:fci_cov_rearrange} and \eqref{eqn:fci_est_rearrange} can be computed to obtain the final results. To depict this process, pseudocode for the encryption at estimators, fusion at the cloud and decryption by the third party are provided in algorithms~\ref{alg:est_enc}, \ref{alg:cloud_fus} and \ref{alg:fus_query}, respectively.
+\begin{algorithm}[htbp]
+\caption{Estimator Encryption}\label{alg:est_enc}
+\begin{algorithmic}[1]
+    \setstretch{1.35}
+    \Procedure{Estimate}{$i$, $k$, $\mathsf{pk}$, $\phi$}
+    \State Estimate $\hat{\vec{x}}_{k,i}$ locally
+    \State Estimate $\mat{P}_{k,i}$ locally
+    \LineComment{Public key is encoding and encryption modulus}
+    \State $N \gets \mathsf{pk}$
+    \LineComment{Compute scaling, covariance and estimate variables}
+    \State $s_{k,i} \gets \mathcal{E}_{\mathsf{pk}}\left(\mathsf{E}_{N,\phi}\left(\frac{1}{\tr(\mat{P}_{k,i})}\right)\right)$
+    \State $\mat{C}_{k,i} \gets \mathcal{E}_{\mathsf{pk}}\left(\mathsf{E}_{N,\phi}\left(\frac{1}{\tr(\mat{P}_{k,i})}\mat{P}_{k,i}^{-1}\right)\right)$
+    \State $\vec{e}_{k,i} \gets \mathcal{E}_{\mathsf{pk}}\left(\mathsf{E}_{N,\phi}\left(\frac{1}{\tr(\mat{P}_{k,i})}\mat{P}_{k,i}^{-1}\hat{\vec{x}}_{k,i}\right)\right)$
+    \State Send $s_{k,i}$, $\mat{C}_{k,i}$ and $\vec{e}_{k,i}$ to fusing cloud
+    \EndProcedure
+\end{algorithmic}
+\end{algorithm}
+\begin{algorithm}[htbp]
+\caption{Cloud Fusion}\label{alg:cloud_fus}
+\begin{algorithmic}[1]
+    \setstretch{1.35}
+    \Procedure{Fuse}{$k$, $\mathsf{pk}$}
+    \State Receive $s_{k,i}$, $\mat{C}_{k,i}$ and $\vec{e}_{k,i}$ for all $1\leq i \leq m$
+    \State $N \gets \mathsf{pk}$
+    \State $s_k \gets \prod_{i=1}^{m} s_{k,i} \pmod{N^2}$
+    \State $\mat{C}_k \gets \otimes_{i=1}^{m} \mat{C}_{k,i} \pmod{N^2}$
+    \State $\vec{e}_k \gets \otimes_{i=1}^{m} \vec{e}_{k,i} \pmod{N^2}$
+    \State Store $s_k$, $\mat{C}_k$ and $\vec{e}_k$ in case of query
+    \EndProcedure
+\end{algorithmic}
+\end{algorithm}
+\begin{algorithm}[htbp]
+\caption{Fusion Query}\label{alg:fus_query}
+\begin{algorithmic}[1]
+    \setstretch{1.35}
+    \Procedure{ObtainFusion}{$k$, $\mathsf{pk}$, $\mathsf{sk}$, $\phi$}
+    \State Query and receive $s_k$, $\mat{C}_k$ and $\vec{e}_k$ from fusing cloud
+    \State $N \gets \mathsf{pk}$
+    \State $\bar{s}_k \gets \left(\mathsf{E}^{-1}_{N,\phi}\left(\mathcal{D}_{\mathsf{sk}}\left(s_k\right)\right)\right)^{-1}$
+    \State $\mat{P}_{k,\mathsf{fus}} \gets \left(\bar{s}_k \cdot \mathsf{E}^{-1}_{N,\phi}\left(\mathcal{D}_{\mathsf{sk}}\left(\mat{C}_k\right)\right)\right)^{-1}$
+    \State $\hat{\vec{x}}_{k,\mathsf{fus}} \gets \mat{P}_{k,\mathsf{fus}} \cdot \bar{s}_k \cdot \mathsf{E}^{-1}_{N,\phi}\left(\mathcal{D}_{\mathsf{sk}}\left(\vec{e}_k\right)\right)$
+    \State \Return $\hat{\vec{x}}_{k,\mathsf{fus}}$, $\mat{P}_{k,\mathsf{fus}}$
+    \EndProcedure
+\end{algorithmic}
+\end{algorithm}
 
-
-
-% TODO say that this additionally supports sequential fusion on the cloud as the scaling component is only additive
-
+Along with allowing the summations to be performed homomorphically on the cloud, we note that this form of the FCI also allows the cloud's partial fusion operations to be evaluated sequentially. This can be seen in algorithm~\ref{alg:cloud_fus}, where individual components $s_{k,i}$, $\mat{C}_{k,i}$ and $\vec{e}_{k,i}$ from each estimator can continue to be aggregated as additional estimators send their estimate information. This, in turn, supports the dynamic joining and leaving of estimators in the network without affecting the cloud or the querying third party operations.
 
 % 
 %  .d8888b.  8888888888 .d8888b.  
@@ -268,7 +315,7 @@ combine information from individual estimators $i$ and are computable homomorphi
 % 
 \section{Security Analysis}\label{sec:security}
 
-% TODO point out that the third party also doesn't learn individual contributions (as should be updated in the problem statement as well)
+% TODO note that n is leaked and that we accept that
 
 
 % 
