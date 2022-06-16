@@ -29,6 +29,7 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 %\usepackage{amsthm} % Errors from \proof when used with this ieeeconf
+%\usepackage{flushend}
 % Algorithms
 \usepackage{algorithm}
 \usepackage{algpseudocode}
@@ -49,7 +50,7 @@
 \algnewcommand{\LineComment}[1]{\Statex \(\triangleright\) #1}
 
 \title{\LARGE \bf
-Encrypted Fast Covariance Intersection on the Cloud Without Leaking Weights
+Encrypted Fast Covariance Intersection Without Leaking Fusion Weights
 }
 
 \author{Marko Ristic$^{1}$ and Benjamin Noack$^{1}$% <-this % stops a space
@@ -98,7 +99,7 @@ Encrypted Fast Covariance Intersection on the Cloud Without Leaking Weights
 \section{Introduction}\label{sec:introduction}
 Data fusion and distributed state estimation have long been active fields of research and continue to find many applications in modern systems today \cite{andersonOptimalFiltering1979,simonOptimalStateEstimation2006}. Methods relying on the Kalman filter and derivatives \cite{haugBayesianEstimationTracking2012} have become particularly prevalent in this area due to their recursive structure and suitability to modelling estimate cross-correlations typically required for data fusion \cite{mutambaraDecentralizedEstimationControl1998,ligginsDistributedDataFusion2012}. The handling of these cross-correlations is especially important when consistent or optimal fusion is desired \cite{bar-shalomTracktotrackCorrelationProblem1981,sunMultisensorOptimalInformation2004} and presents a key challenge in data fusion when they are not known in advance. To overcome this, some methods propagate cross-correlations through time at the cost of repeated reconstruction \cite{steinbringOptimalSamplebasedFusion2016} and typically add local computational complexity. Alternative methods approximate error cross-correlations with conservative suboptimal estimates to provide consistent fusion instead \cite{julierNondivergentEstimationAlgorithm1997,noackDecentralizedDataFusion2017,niehsenInformationFusionBased2002}. One such popular method is Covariance Intersection \cite{julierNondivergentEstimationAlgorithm1997} and it computationally inexpensive approximation, Fast Covariance Intersection \cite{niehsenInformationFusionBased2002}. These methods minimise fusion estimate error given possible conservative estimates and are popular due to their compatibility with the information form of the Kalman filter \cite{mutambaraDecentralizedEstimationControl1998,pfaffInformationFormDistributed2017}.
 
-While effective and often efficient, these data fusion solutions have traditionally been performed on closed networks with trusted participants and inherently imply a trust between sensors and estimators. In recent years, the ubiquity of distributed public networks has seen the additional challenges of security and privacy become increasingly relevant in distributed sensing environments and has led to an active field of reserach in providing security during data processing and fusion tasks \cite{renSecurityChallengesPublic2012,brennerSecretProgramExecution2011}. While ensuring transimitted information is kept secret from eavesdroppers on untrusted networks is achievable with common private and public key encryption schemes \cite{katzIntroductionModernCryptography2008}, tasks involving untrusted participants during computations present a greater challenge. Here, partial computations on encrypted data or the leakage of intermediate results are often required for arriving at the final result \cite{risticSecureFastCovariance2021,shiPrivacyPreservingAggregationTimeSeries2011}. One common tool for achieving these requirements is homomorphic encryption \cite{gentryFullyHomomorphicEncryption2009,paillierPublicKeyCryptosystemsBased1999} which allows operations to be computed on encrypted numbers without decryption. The Pailler encryption scheme \cite{paillierPublicKeyCryptosystemsBased1999} allows homomorphic addition and is a frequent choice in fusion application due to its applicability, simplicity and provable security. In \cite{alanwarPrOLocResilientLocalization2017}, the Paillier scheme is used to perform non-Bayesian measurement fusion with range-sensors without disclosing individual sensor locations or measurements, while in \cite{aristovEncryptedMultisensorInformation2018}, it is used in to achieve similar security with a Kalman filter when measurements are linear and sensors form a heirarchical network. When paired with additional schemes that introduce some leakage, tasks in a wider variety of scenarios can often be solved as well. \cite{alexandruEncryptedCooperativeControl2019} uses private weighted sum aggregation together with the Paillier scheme to compute decentralised local control inputs while leaking only the sum of weighted neightbouring states, while in \cite{risticSecureFastCovariance2021}, an untrusted cloud can use order-revealing encryptions to compute and leak relative sensor accuracies allowing the homomorphic computation of the Covariance Intersection fusion algorithm.
+While effective and often efficient, these data fusion solutions have traditionally been performed on closed networks with trusted participants and inherently imply a trust between sensors and estimators. In recent years, the ubiquity of distributed public networks has seen the additional challenges of security and privacy become increasingly relevant in distributed sensing environments and has led to an active field of reserach in providing security during data processing and fusion tasks \cite{renSecurityChallengesPublic2012,brennerSecretProgramExecution2011}. While ensuring transimitted information is kept secret from eavesdroppers on untrusted networks is achievable with common private and public key encryption schemes \cite{katzIntroductionModernCryptography2008}, tasks involving untrusted participants during computations present a greater challenge. Here, partial computations on encrypted data or the leakage of intermediate results are often required for arriving at the final result \cite{risticSecureFastCovariance2021,shiPrivacyPreservingAggregationTimeSeries2011}. One common tool for achieving these requirements is homomorphic encryption \cite{gentryFullyHomomorphicEncryption2009,paillierPublicKeyCryptosystemsBased1999} which allows operations to be computed on encrypted numbers without decryption. The Pailler encryption scheme \cite{paillierPublicKeyCryptosystemsBased1999} allows homomorphic addition and is a frequent choice in fusion application due to its applicability, simplicity and provable security. In \cite{alanwarPrOLocResilientLocalization2017}, the Paillier scheme is used to perform non-Bayesian measurement fusion with range-sensors without disclosing individual sensor locations or measurements, while in \cite{aristovEncryptedMultisensorInformation2018}, it is used in to achieve similar security with a Kalman filter when measurements are linear and sensors form a heirarchical network. When paired with additional schemes that introduce some leakage, a wider variety of tasks can often be solved as well. \cite{alexandruEncryptedCooperativeControl2019} uses private weighted sum aggregation together with the Paillier scheme to compute decentralised local control inputs while leaking only the sum of weighted neightbouring states, while in \cite{risticSecureFastCovariance2021}, an untrusted cloud can use order-revealing encryptions to compute and leak relative sensor accuracies allowing the homomorphic computation of the Fast Covariance Intersection algorithm.
 
 In this work, we consider stochastic state estimate fusion on an untrusted cloud similar to \cite{risticSecureFastCovariance2021}, but aim to fuse estimates with no leakage at the cloud. Our contribution is a novel method for computing the Fast Covariance Intersection algorithm using only the Paillier encryption scheme and leaking no intermediate information to the untrsuted cloud. While in some use-cases, leaked relative sensor accuracies can be useful for prioritising sensor communications, this leakage inherently informs the cloud about sensor performances over time, disclosing the times when sensors are out of range or non-functioning and implicitly leaking information about the fused estimate. Therefore, the presented method finds application when all sensor information is considered sensitive and when the fusing cloud is not trusted.
 
@@ -106,6 +107,8 @@ Section~\ref{sec:problem} introduces the formal data fusion and security goals a
 
 \subsection{Notation}
 Throughout this work, the following notation is used. Plain characters, $a$, denote scalars, underlined lowercase characters, $\vec{b}$, denote vectors and uppercase bold characters, $\mat{C}$, denote matrices. $\mat{C}^{-1}$ denotes the matrix inverse and $\tr(\mat{C})$ the matrix trace. Encryption with a public key $\mathsf{pk}$ is denoted $\mathcal{E}_{\mathsf{pk}}(\cdot)$ and decryption with a private key $\mathsf{sk}$ is denoted $\mathcal{D}_{\mathsf{sk}}(\cdot)$, while encoding and decoding with parameters $M$ and $\phi$ are denoted $\mathsf{E}_{M,\phi}(\cdot)$ and $\mathsf{E}^{-1}_{M,\phi}(\cdot)$, respectively. All encryption and encoding operations on vectors or matrices are performed elementwise and the expression $\otimes_{i=1}^{m}\mat{C}_i$ is used to denote elementwise multiplication for multidimensional data.
+
+% TODO zero vector, distribution?
 
 % 
 % 8888888b.  8888888b.   .d88888b.  888888b.   
@@ -332,6 +335,56 @@ We do, however, note an implicit assumption that is made when encrypting multidi
 %                                 
 % 
 \section{Simulation and Results}\label{sec:simulation}
+Fusion estimates and error covariances from the encrypted FCI method in section~\ref{sec:encrypted_fci} differ from unencrypted FCI only when quantisation errors are large or summation overflow occurs. As stated in section~\ref{subsec:encoding}, when the Paillier modulus $N$ is large, these errors can often be considered negligible. In this section, we demonstrate the similarilty in performance between the encrypted and unencrypted FCI fusion algorithms with a simulation written in the Python programming language, using the $\mathsf{phe}$ Paillier encryption scheme library \cite{PythonPaillier2013} and a $512$ bit length key (bit length of $N$). The simulation implements a linear constant velocity model,
+\begin{equation}\label{eqn:sim_sys_model}
+    \vec{x}_k =
+    \begin{bmatrix}
+        1 & 0.5 & 0 & 0\\
+        0 & 1 & 0 & 0\\
+        0 & 0 & 1 & 0.5\\
+        0 & 0 & 0 & 0
+    \end{bmatrix}
+    \cdot \vec{x}_{k-1} + \vec{w}_k\,,
+\end{equation}
+with noise term $\vec{w}_k \sim \mathcal{N}(\vec{0}, \mat{Q})$ and
+\begin{equation}
+    \mat{Q} = 10^{-3} \cdot
+    \begin{bmatrix}
+        0.42 & 1.25 & 0 & 0\\
+        1.25 & 5 & 0 & 0\\
+        0 & 0 & 0.42 & 1.25\\
+        0 & 0 & 1.25 & 5
+    \end{bmatrix}\,.
+\end{equation}
+At each timestep $k$, the system state $\vec{x}_k$ is estimated by $m=4$ estimators, $1\leq i \leq 4$, using a standard linear Kalman filter (KF) \cite{haugBayesianEstimationTracking2012} and producing estimates and error covariances $\hat{\vec{x}}_{k,i}$ and $\mat{P}_{k,i}$, respectively. The measurements used by the KF, $\vec{z}_{k,i}$, follow the measurement models
+\begin{equation}
+    \vec{z}_{k,i} = 
+    \begin{bmatrix}
+        1 & 0 & 0 & 0\\
+        0 & 0 & 1 & 0
+    \end{bmatrix}
+    \cdot \vec{x}_k + \vec{v}_{k,i}\,,
+\end{equation}
+with noise terms $\vec{v}_{k,i} \sim \mathcal{N}(\vec{0}, \mat{R}_i)$ and covariances sampled indepedently for each simulation. Here, sampling of covariances was performed by uniformely sampling scaling and correlation components, $s_x\,,\ s_y \sim \mathcal{U}(0,6)$ and $c \sim \mathcal{U}(0,\pi/2)$, respectively, and setting
+\begin{equation}
+    \mat{R}_i = 
+    \begin{bmatrix}
+        \cos{c} & -\sin{c}\\
+        \sin{c} & \cos{c}
+    \end{bmatrix}\cdot
+    \begin{bmatrix}
+        s_x & 0\\
+        0 & s_y
+    \end{bmatrix}\cdot
+    \begin{bmatrix}
+        \cos{c} & \sin{c}\\
+        -\sin{c} & \cos{c}
+    \end{bmatrix}\,.
+\end{equation}
+The fusion results of $1000$ simulation runs are shown in figure . From the figure, we 
+
+
+
 
 
 % 
