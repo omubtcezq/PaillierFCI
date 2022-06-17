@@ -335,7 +335,7 @@ We do, however, note an implicit assumption that is made when encrypting multidi
 %                                 
 % 
 \section{Simulation}\label{sec:simulation}
-Fusion estimates and error covariances from the encrypted FCI method in section~\ref{sec:encrypted_fci} differ from unencrypted FCI only when quantisation errors are large or summation overflow occurs. As stated in section~\ref{subsec:encoding}, when the Paillier modulus $N$ is large, these errors can often be considered negligible. In this section, we demonstrate the similarilty in performance between the encrypted and unencrypted FCI fusion algorithms with a simulation written in the Python programming language, using the $\mathsf{phe}$ Paillier encryption scheme library \cite{PythonPaillier2013} and a $512$ bit length key (bit length of $N$). The simulation implements a linear constant velocity model,
+Fusion estimates and error covariances from the encrypted FCI method in section~\ref{sec:encrypted_fci} differ from unencrypted FCI only when quantisation errors are large or summation overflow occurs. As stated in section~\ref{subsec:encoding}, when the Paillier modulus $N$ is large, these errors can often be considered negligible. In this section, we demonstrate this similarilty in performance between the encrypted and unencrypted FCI fusion algorithms with a simulation. Code was written in the Python programming language, using the $\mathsf{phe}$ Paillier encryption scheme library \cite{PythonPaillier2013} and a $512$ bit length key (bit length of $N$). The simulation implements a linear constant velocity model,
 \begin{equation}\label{eqn:sim_sys_model}
     \vec{x}_k =
     \begin{bmatrix}
@@ -391,7 +391,7 @@ The fusion results of $1000$ simulation runs are shown in figure \ref{fig:sim_er
     \caption{Average RMSE of encrypted and unencrypted FCI fusion over $1000$ simulations.}
     \label{fig:sim_error_plot}
 \end{figure}
-From the figure, we can see the expected similarity in performace between the encrypted and unencrypted FCI methods. Additionally, we note that the current recommended key length for the Paillier encryption scheme is $2048$ bits \cite{barkerRecommendationPairWiseKey2019}, easily ensuring similar performance.
+From the figure, we can see the expected similarity in performace between the encrypted and unencrypted FCI methods. Additionally, we note that the current recommended key length for the Paillier encryption scheme is $2048$ bits \cite{barkerRecommendationPairWiseKey2019}, easily ensuring similar accuracy.
 
 
 
