@@ -334,7 +334,7 @@ We do, however, note an implicit assumption that is made when encrypting multidi
 %                                 
 %                                 
 % 
-\section{Simulation and Results}\label{sec:simulation}
+\section{Simulation}\label{sec:simulation}
 Fusion estimates and error covariances from the encrypted FCI method in section~\ref{sec:encrypted_fci} differ from unencrypted FCI only when quantisation errors are large or summation overflow occurs. As stated in section~\ref{subsec:encoding}, when the Paillier modulus $N$ is large, these errors can often be considered negligible. In this section, we demonstrate the similarilty in performance between the encrypted and unencrypted FCI fusion algorithms with a simulation written in the Python programming language, using the $\mathsf{phe}$ Paillier encryption scheme library \cite{PythonPaillier2013} and a $512$ bit length key (bit length of $N$). The simulation implements a linear constant velocity model,
 \begin{equation}\label{eqn:sim_sys_model}
     \vec{x}_k =
@@ -365,24 +365,33 @@ At each timestep $k$, the system state $\vec{x}_k$ is estimated by $m=4$ estimat
     \end{bmatrix}
     \cdot \vec{x}_k + \vec{v}_{k,i}\,,
 \end{equation}
-with noise terms $\vec{v}_{k,i} \sim \mathcal{N}(\vec{0}, \mat{R}_i)$ and covariances sampled indepedently for each simulation. Here, sampling of covariances was performed by uniformely sampling scaling and correlation components, $s_x\,,\ s_y \sim \mathcal{U}(0,6)$ and $c \sim \mathcal{U}(0,\pi/2)$, respectively, and setting
+with noise terms $\vec{v}_{k,i} \sim \mathcal{N}(\vec{0}, \mat{R}_i)$ and covariances sampled indepedently, resulting in
 \begin{equation}
-    \mat{R}_i = 
+    \mat{R}_1 = 
     \begin{bmatrix}
-        \cos{c} & -\sin{c}\\
-        \sin{c} & \cos{c}
-    \end{bmatrix}\cdot
+        a
+    \end{bmatrix}\,,\ 
+    \mat{R}_2 = 
     \begin{bmatrix}
-        s_x & 0\\
-        0 & s_y
-    \end{bmatrix}\cdot
+        a
+    \end{bmatrix}\,,\ 
+    \mat{R}_3 = 
     \begin{bmatrix}
-        \cos{c} & \sin{c}\\
-        -\sin{c} & \cos{c}
+        a
+    \end{bmatrix}\text{ and }
+    \mat{R}_4 = 
+    \begin{bmatrix}
+        a
     \end{bmatrix}\,.
 \end{equation}
-The fusion results of $1000$ simulation runs are shown in figure . From the figure, we 
-
+The fusion results of $1000$ simulation runs are shown in figure \ref{fig:sim_error_plot}. 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics{figures/sim_error_plot.pdf}
+    \caption{Average RMSE of encrypted and unencrypted FCI fusion over $1000$ simulations.}
+    \label{fig:sim_error_plot}
+\end{figure}
+From the figure, we can see the expected similarity in performace between the encrypted and unencrypted FCI methods. Additionally, we note that the current recommended key length for the Paillier encryption scheme is $2048$ bits \cite{barkerRecommendationPairWiseKey2019}, easily ensuring similar performance.
 
 
 
