@@ -367,22 +367,28 @@ At each timestep $k$, the system state $\vec{x}_k$ is estimated by $m=4$ estimat
 \end{equation}
 with noise terms $\vec{v}_{k,i} \sim \mathcal{N}(\vec{0}, \mat{R}_i)$ and covariances sampled indepedently, resulting in
 \begin{equation}
-    \mat{R}_1 = 
-    \begin{bmatrix}
-        a
-    \end{bmatrix}\,,\ 
-    \mat{R}_2 = 
-    \begin{bmatrix}
-        a
-    \end{bmatrix}\,,\ 
-    \mat{R}_3 = 
-    \begin{bmatrix}
-        a
-    \end{bmatrix}\text{ and }
-    \mat{R}_4 = 
-    \begin{bmatrix}
-        a
-    \end{bmatrix}\,.
+    \begin{split}
+        &\mat{R}_1 = 
+        \begin{bmatrix}
+            4.77 & -0.15\\
+            -0.15 & 4.94
+        \end{bmatrix}\,,\ 
+        \mat{R}_2 = 
+        \begin{bmatrix}
+            2.99 & -0.55\\
+            -0.55 & 4.44
+        \end{bmatrix}\,,\\
+        &\mat{R}_3 = 
+        \begin{bmatrix}
+            2.06 & 0.68\\
+            0.68 & 1.96
+        \end{bmatrix}\text{ and }
+        \mat{R}_4 = 
+        \begin{bmatrix}
+            1.17 & 0.80\\
+            0.80 & 0.64
+        \end{bmatrix}\,.
+    \end{split}
 \end{equation}
 The fusion results of $1000$ simulation runs are shown in figure \ref{fig:sim_error_plot}. 
 \begin{figure}[htbp]
@@ -391,10 +397,7 @@ The fusion results of $1000$ simulation runs are shown in figure \ref{fig:sim_er
     \caption{Average RMSE of encrypted and unencrypted FCI fusion over $1000$ simulations.}
     \label{fig:sim_error_plot}
 \end{figure}
-From the figure, we can see the expected similarity in performace between the encrypted and unencrypted FCI methods. Additionally, we note that the current recommended key length for the Paillier encryption scheme is $2048$ bits \cite{barkerRecommendationPairWiseKey2019}, easily ensuring similar accuracy.
-
-
-
+From the figure, we can clearly see the expected similarity in performace between the encrypted and unencrypted FCI methods. Additionally, we note that the current recommended key length for the Paillier encryption scheme is $2048$ bits \cite{barkerRecommendationPairWiseKey2019}, easily supporting a modulus $N$ and fractional precision $\phi$ that guarantee similar performance.
 
 % 
 %  .d8888b.   .d88888b.  888b    888  .d8888b.  
@@ -410,7 +413,7 @@ From the figure, we can see the expected similarity in performace between the en
 %                                               
 % 
 \section{Conclusion}\label{sec:conclusion}
-
+In this work, we have presented a method for computing encrypted Fast Covariance Intersection homomorphically on an untrusted cloud and discussed its security guarantees. The method ensures no information leakage at the cloud, eavesdroppers or estimators and an accompanying simulation demonstrates its minimal effect on estimation performance when compared to the unencrypted algorithm. Applications include a variety of distributed fusion tasks when external fusing computations are required such as weather forecasting and vehicle localisation. Future work on the topic aims to extend the method to include multivariable encryption, hiding the dimension variable $n$, and to generalise to decentralised environments where individual fusers are untrusted.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
