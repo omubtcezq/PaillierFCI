@@ -29,11 +29,13 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 %\usepackage{amsthm} % Errors from \proof when used with this ieeeconf
-%\usepackage{flushend}
+\usepackage{flushend}
 % Algorithms
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{setspace}
+% Graphics
+\usepackage{tikz}
 % Local
 \usepackage{local_macros/isasmathmacros}
 
@@ -45,6 +47,11 @@
 %\theoremstyle{remark} % Doesn't exist when used with this ieeeconf
 %\newtheorem*{remark}{Remark} % Doesn't exist when used with this ieeeconf
 \newtheorem{remark}{Remark}
+
+% Tiks colours
+\definecolor{pyplotblue}{RGB}{31,119,180}
+\definecolor{pyplotorange}{RGB}{255,127,14}
+\definecolor{pyplotgreen}{RGB}{44,160,44}
 
 % Algorithm settings
 \algnewcommand{\LineComment}[1]{\Statex \(\triangleright\) #1}
@@ -132,7 +139,39 @@ respectively, at every timestep $k$. Our aim at every timestep is for all estima
 \end{equation}
 respectively, are computed and are consistent with the estimates in \eqref{eqn:ests_and_covs}.
 
-Simultaneously, we consider the desired security of the fusion process. The fusing cloud and estimators are treated as \textit{honest-but-curious}, that is, they follow protocols correctly but may use learned information for malicious gain, and a trusted third-party exists that can query the cloud at any timestep $k$ to obtain the fusion results in \eqref{eqn:fus_ests_and_covs}. We aim for the cloud, estimators and eavesdroppers to learn no additional information from observed estimates and fusions, \eqref{eqn:ests_and_covs} and \eqref{eqn:fus_ests_and_covs}, respectively, beyond their local estimates. To guarantee this, cryptographic \textit{Indistinguishability under the Chosen Plaintext Attack} (IND-CPA) \cite{katzIntroductionModernCryptography2008} is desired for all transmitted and processed information. This is in line with common security goals in the field and suitable for homomorphic encryption.
+Simultaneously, we consider the desired security of the fusion process. The fusing cloud and estimators are treated as \textit{honest-but-curious}, that is, they follow protocols correctly but may use learned information for malicious gain, and a trusted third-party exists that can query the cloud at any timestep $k$ to obtain the fusion results in \eqref{eqn:fus_ests_and_covs}. We aim for the cloud, estimators and eavesdroppers to learn no additional information from observed estimates and fusions, \eqref{eqn:ests_and_covs} and \eqref{eqn:fus_ests_and_covs}, respectively, beyond their local estimates. To guarantee this, cryptographic \textit{Indistinguishability under the Chosen Plaintext Attack} (IND-CPA) \cite{katzIntroductionModernCryptography2008} is desired for all transmitted and processed information. This is in line with common security goals in the field and suitable for homomorphic encryption. The communications of this scenario are summarised graphically in figure \ref{fig:layout}.
+\begin{figure}[htpb]
+    \centering
+    \begin{tikzpicture}
+        % Bounding box
+        \draw [gray] (1,0) rectangle (8.5,7);
+        % Estimators
+        \node [above] at (4.75,6.25) {Estimators};
+        \fill [pyplotblue!70] (7,5.5) ellipse (0.5 and 0.5);
+        \fill [pyplotblue!70] (2.5,5.5) ellipse (0.5 and 0.5);
+        \fill [black] (5,5.5) circle (0.05);
+        \fill [black] (4.5,5.5) circle (0.05);
+        \fill [black] (4.75,5.5) circle (0.05);
+        % Estimates
+        \node [right] at (6.25,4.5) {$\hat{\vec{x}}_{k,m},\mat{P}_{k,m}$};
+        \node [left] at (3.25,4.5) {$\hat{\vec{x}}_{k,1},\mat{P}_{k,1}$};
+        % Fusion
+        \node [right] at (5.25,1.5) {$\hat{\vec{x}}_{k,\mathsf{fus}},\mat{P}_{k,\mathsf{fus}}$};
+        % Cloud
+        \node [right] at (5.5,3.5) {Cloud};
+        \fill [pyplotorange!70] (4.75,3.5) ellipse (0.5 and 0.5);
+        % Third-party
+        \node [below] at (4.75,0.75) {Trusted Third-party};
+        \fill [pyplotgreen!70] (4.75,1.5) ellipse (0.5 and 0.5);
+        % Estimator arrows
+        \draw [-latex]  plot coordinates {(3,5)  (4.25,4)};
+        \draw [-latex]  plot coordinates {(6.5,5)  (5.25,4)};
+        % Third-party arrows
+        \draw [latex-latex]  plot coordinates {(4.75,2.9)  (4.75,2.1)};
+    \end{tikzpicture}
+    \caption{The participants, inputs and output of the considered fusion scenario.}
+    \label{fig:layout}
+\end{figure}
 
 % 
 % 8888888b.  8888888b.  8888888888 888      8888888 888b     d888 
