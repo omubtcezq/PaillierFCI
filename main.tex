@@ -30,7 +30,7 @@
 \usepackage{amsfonts}
 %\usepackage{amsthm} % Errors from \proof when used with this ieeeconf
 \usepackage{mathtools}
-%\usepackage{flushend} % Sometime breaks order of references
+%\usepackage{flushend} % Sometimes breaks order of references
 % Algorithms
 \usepackage{algorithm}
 \usepackage{algpseudocode}
@@ -105,9 +105,47 @@ Encrypted Fast Covariance Intersection\\Without Leaking Fusion Weights
 %                                                        
 % 
 \section{Introduction}\label{sec:introduction}
-Data fusion and distributed state estimation have long been active fields of research and continue to find many applications in modern systems today \cite{andersonOptimalFiltering1979,simonOptimalStateEstimation2006}. Methods relying on the Kalman filter and derivatives \cite{haugBayesianEstimationTracking2012} have become particularly prevalent in this area due to their recursive structure and suitability to modelling estimate cross-correlations typically required for data fusion \cite{mutambaraDecentralizedEstimationControl1998,ligginsDistributedDataFusion2012}. The handling of these cross-correlations is especially important when consistent or optimal fusion is desired \cite{bar-shalomTracktotrackCorrelationProblem1981,sunMultisensorOptimalInformation2004} and presents a key challenge in data fusion when they are not known in advance. To overcome this, some methods propagate cross-correlations through time at the cost of repeated reconstruction \cite{steinbringOptimalSamplebasedFusion2016,radtkeReconstructionCrossCorrelationsConstant2018} and typically add local computational complexity. Alternative methods approximate error cross-correlations with conservative suboptimal estimates to provide consistent fusion instead \cite{julierNondivergentEstimationAlgorithm1997,noackDecentralizedDataFusion2017,niehsenInformationFusionBased2002}. One such popular method is Covariance Intersection \cite{julierNondivergentEstimationAlgorithm1997} and its computationally inexpensive approximation, Fast Covariance Intersection \cite{niehsenInformationFusionBased2002}. These methods minimise fusion estimate error given possible conservative estimates and are popular due to their compatibility with the information form of the Kalman filter \cite{mutambaraDecentralizedEstimationControl1998,pfaffInformationFormDistributed2017}.
+Data fusion and distributed state estimation have long been active fields of research and continue to find many applications in modern systems today \cite{andersonOptimalFiltering1979,simonOptimalStateEstimation2006}. Methods relying on the Kalman filter and derivatives \cite{haugBayesianEstimationTracking2012} have become particularly prevalent in this area due to their recursive structure and suitability to modelling estimate cross-correlations typically required for data fusion \cite{mutambaraDecentralizedEstimationControl1998,ligginsDistributedDataFusion2012}. The handling of these cross-correlations is especially important when consistent or optimal fusion is desired \cite{bar-shalomTracktotrackCorrelationProblem1981,sunMultisensorOptimalInformation2004} and presents a key challenge in data fusion when they are not known in advance. To overcome this, some methods propagate cross-correlations through time at the cost of repeated reconstruction \cite{steinbringOptimalSamplebasedFusion2016,radtkeReconstructionCrossCorrelationsConstant2018,radtkeFullyDecentralizedEstimationUsing2021} and typically add local computational complexity. Alternative methods approximate error cross-correlations with conservative suboptimal estimates to provide consistent fusion instead \cite{julierNondivergentEstimationAlgorithm1997,noackDecentralizedDataFusion2017,niehsenInformationFusionBased2002}. One such popular method is Covariance Intersection \cite{julierNondivergentEstimationAlgorithm1997} and its computationally inexpensive approximation, Fast Covariance Intersection \cite{niehsenInformationFusionBased2002}. These methods minimise fusion estimate error given possible conservative estimates and are popular due to their compatibility with the information form of the Kalman filter \cite{mutambaraDecentralizedEstimationControl1998,pfaffInformationFormDistributed2017}.
+% Figure moved here arbitrarily to be on the top right corner of the first page
+\begin{figure}[t]
+    \centering
+    \begin{tikzpicture}
+        % Bounding box
+        %\draw [gray] (1,-1.5) rectangle (8.5,7);
+        % Estimators
+        \node at (2.5,6.25) {Estimator $1$};
+        \node at (7,6.25) {Estimator $m$};
+        \fill [pyplotorange!70] (7,5.5) ellipse (0.5 and 0.5);
+        \fill [pyplotorange!70] (2.5,5.5) ellipse (0.5 and 0.5);
+        \fill [black] (5,5.5) circle (0.05);
+        \fill [black] (4.5,5.5) circle (0.05);
+        \fill [black] (4.75,5.5) circle (0.05);
+        % Estimates
+        \node [right] at (6.25,4.5) {$\hat{\vec{x}}_{k,m},\mat{P}_{k,m}$};
+        \node [left] at (3.25,4.5) {$\hat{\vec{x}}_{k,1},\mat{P}_{k,1}$};
+        % Fusion
+        \node [right] at (5.25,0.5) {$\hat{\vec{x}}_{k,\mathsf{fus}},\mat{P}_{k,\mathsf{fus}}$};
+        % Cloud
+        \node at (4.75,3.65) {Cloud};
+        \fill [pyplotorange!70] (4.75,3) ellipse (0.4 and 0.4);
+        \fill [pyplotorange!70] (5.25,2.75) ellipse (0.4 and 0.25);
+        \fill [pyplotorange!70] (4.25,2.75) ellipse (0.25 and 0.25);
+        \fill [pyplotorange!70] (5.25,3) ellipse (0.25 and 0.25);
+        \fill [pyplotorange!70] (4.25,2.5) rectangle (5.25,2.75);
+        % Third-party
+        \node at (4.75,1.25) {Trusted Third-party};
+        \fill [pyplotblue!70] (5.5,-0.25) -- (4,-0.25) -- (4.75,1);
+        % Estimator arrows
+        \draw [-latex]  plot coordinates {(3,5)  (4.25,4)};
+        \draw [-latex]  plot coordinates {(6.5,5)  (5.25,4)};
+        % Third-party arrows
+        \draw [latex-latex]  plot coordinates {(4.75,2.3)  (4.75,1.65)};
+    \end{tikzpicture}
+    \caption{The participants, inputs and output of the considered fusion scenario.}
+    \label{fig:layout}
+\end{figure}
 
-While effective and often efficient, these data fusion solutions have traditionally been performed on closed networks with trusted participants and inherently imply trust between sensors and estimators. In recent years, the ubiquity of distributed public networks has seen the additional challenges of security and privacy become increasingly relevant in distributed sensing environments and has led to an active field of research in providing security during data processing and fusion tasks \cite{renSecurityChallengesPublic2012,brennerSecretProgramExecution2011}. While one can ensure transmitted information is kept secret from eavesdroppers on untrusted networks by using common private and public key encryption schemes \cite{katzIntroductionModernCryptography2008}, tasks involving untrusted participants during computations present a greater challenge. Here, partial computations on encrypted data or the leakage of intermediate results are often required for arriving at the final result \cite{risticSecureFastCovariance2021,shiPrivacyPreservingAggregationTimeSeries2011}. One common tool for achieving these requirements is homomorphic encryption \cite{gentryFullyHomomorphicEncryption2009,paillierPublicKeyCryptosystemsBased1999} which allows operations to be computed on encrypted numbers without decryption. The Pailler encryption scheme \cite{paillierPublicKeyCryptosystemsBased1999} allows homomorphic addition and is a frequent choice in fusion applications due to its applicability, simplicity and provable security. In \cite{alanwarPrOLocResilientLocalization2017}, the Paillier scheme is used to perform non-Bayesian measurement fusion with range-sensors without disclosing individual sensor locations or measurements, while in \cite{aristovEncryptedMultisensorInformation2018}, it is used to achieve similar security with a Kalman filter when measurements are linear and sensors form a hierarchical network. When paired with additional schemes that introduce some leakage, a wider variety of tasks can often be solved as well. The work in \cite{alexandruEncryptedCooperativeControl2019} uses private weighted sum aggregation together with the Paillier scheme to compute decentralised local control inputs while leaking only the sum of weighted neighbouring states, and in \cite{risticSecureFastCovariance2021}, an untrusted cloud can use order-revealing encryptions to compute and leak relative sensor accuracies allowing the homomorphic computation of the Fast Covariance Intersection algorithm.
+While effective and often efficient, these data fusion solutions have traditionally been performed on closed networks with trusted participants and inherently imply trust between sensors and estimators. In recent years, the ubiquity of distributed public networks has seen the additional challenges of security and privacy become increasingly relevant in distributed sensing environments and has led to an active field of research in providing security during data processing and fusion tasks \cite{renSecurityChallengesPublic2012,brennerSecretProgramExecution2011}. While one can ensure transmitted information is kept secret from eavesdroppers on untrusted networks by using common private and public key encryption schemes \cite{katzIntroductionModernCryptography2008}, tasks involving untrusted participants during computations present a greater challenge. Here, partial computations on encrypted data or the intended leakage of some results are often required or desired to arrive at the final result \cite{risticSecureFastCovariance2021,shiPrivacyPreservingAggregationTimeSeries2011,risticCryptographicallyPrivilegedState2022}. One common tool for achieving these requirements is homomorphic encryption \cite{gentryFullyHomomorphicEncryption2009,paillierPublicKeyCryptosystemsBased1999} which allows operations to be computed on encrypted numbers without decryption. The Pailler encryption scheme \cite{paillierPublicKeyCryptosystemsBased1999} allows homomorphic addition and is a frequent choice in fusion applications due to its applicability, simplicity and provable security. In \cite{alanwarPrOLocResilientLocalization2017}, the Paillier scheme is used to perform non-Bayesian measurement fusion with range-sensors without disclosing individual sensor locations or measurements, while in \cite{aristovEncryptedMultisensorInformation2018}, it is used to achieve similar security with a Kalman filter when measurements are linear and sensors form a hierarchical network. When paired with additional schemes that introduce some leakage, a wider variety of tasks can often be solved as well. The work in \cite{alexandruEncryptedCooperativeControl2019} uses private weighted sum aggregation together with the Paillier scheme to compute decentralised local control inputs while leaking only the sum of weighted neighbouring states, and in \cite{risticSecureFastCovariance2021}, an untrusted cloud can use order-revealing encryptions to compute and leak relative sensor accuracies allowing the homomorphic computation of the Fast Covariance Intersection algorithm.
 
 In this work, we consider stochastic state estimate fusion on an untrusted cloud similar to \cite{risticSecureFastCovariance2021}, but aim to fuse estimates with no leakage at the cloud. Our contribution is a novel method for computing the Fast Covariance Intersection algorithm using only the Paillier encryption scheme and leaking no intermediate information to the untrsuted cloud. While in some use-cases, leaked relative sensor accuracies can be useful for prioritising sensor communications, this leakage inherently informs the cloud about sensor performances over time, disclosing the times when sensors are out of range or non-functioning and implicitly leaking information about the fused estimate. Therefore, the presented method finds application when all sensor information is considered sensitive and when the fusing cloud is not trusted.
 
@@ -141,38 +179,6 @@ respectively, at every timestep $k$. Our aim at every timestep is for all estima
 respectively, are computed and are consistent with the estimates in \eqref{eqn:ests_and_covs}.
 
 Simultaneously, we consider the desired security of the fusion process. The fusing cloud and estimators are treated as \textit{honest-but-curious}, that is, they follow protocols correctly but may use learned information for malicious gain, and a trusted third-party exists that can query the cloud at any timestep $k$ to obtain the fusion results in \eqref{eqn:fus_ests_and_covs}. We aim for the cloud, estimators and eavesdroppers to learn no additional information from observed estimates and fusions, \eqref{eqn:ests_and_covs} and \eqref{eqn:fus_ests_and_covs}, respectively, beyond their local estimates. To guarantee this, cryptographic \textit{Indistinguishability under the Chosen Plaintext Attack} (IND-CPA) \cite{katzIntroductionModernCryptography2008} is desired for all transmitted and processed information. This is in line with common security goals in the field and suitable for homomorphic encryption. The communications of this scenario are summarised graphically in figure \ref{fig:layout}.
-\begin{figure}[htpb]
-    \centering
-    \begin{tikzpicture}
-        % Bounding box
-        \draw [gray] (1,0) rectangle (8.5,7);
-        % Estimators
-        \node [above] at (4.75,6.25) {Estimators};
-        \fill [pyplotblue!70] (7,5.5) ellipse (0.5 and 0.5);
-        \fill [pyplotblue!70] (2.5,5.5) ellipse (0.5 and 0.5);
-        \fill [black] (5,5.5) circle (0.05);
-        \fill [black] (4.5,5.5) circle (0.05);
-        \fill [black] (4.75,5.5) circle (0.05);
-        % Estimates
-        \node [right] at (6.25,4.5) {$\hat{\vec{x}}_{k,m},\mat{P}_{k,m}$};
-        \node [left] at (3.25,4.5) {$\hat{\vec{x}}_{k,1},\mat{P}_{k,1}$};
-        % Fusion
-        \node [right] at (5.25,1.5) {$\hat{\vec{x}}_{k,\mathsf{fus}},\mat{P}_{k,\mathsf{fus}}$};
-        % Cloud
-        \node [right] at (5.5,3.5) {Cloud};
-        \fill [pyplotorange!70] (4.75,3.5) ellipse (0.5 and 0.5);
-        % Third-party
-        \node [below] at (4.75,0.75) {Trusted Third-party};
-        \fill [pyplotgreen!70] (4.75,1.5) ellipse (0.5 and 0.5);
-        % Estimator arrows
-        \draw [-latex]  plot coordinates {(3,5)  (4.25,4)};
-        \draw [-latex]  plot coordinates {(6.5,5)  (5.25,4)};
-        % Third-party arrows
-        \draw [latex-latex]  plot coordinates {(4.75,2.9)  (4.75,2.1)};
-    \end{tikzpicture}
-    \caption{The participants, inputs and output of the considered fusion scenario.}
-    \label{fig:layout}
-\end{figure}
 
 % 
 % 8888888b.  8888888b.  8888888888 888      8888888 888b     d888 
@@ -351,7 +357,9 @@ combine information from individual estimators $i$ and are computable homomorphi
 \end{algorithmic}
 \end{algorithm}
 
-Along with allowing the summations to be performed homomorphically on the cloud, we note that this form of the FCI also allows the cloud's partial fusion operations to be evaluated sequentially. This can be seen in algorithm~\ref{alg:cloud_fus}, where individual components $s_{k,i}$, $\mat{C}_{k,i}$ and $\vec{e}_{k,i}$ from each estimator can continue to be aggregated as additional estimators send their estimate information. This, in turn, supports the dynamic joining and leaving of estimators in the network without affecting the cloud or the trusted third-party operations.
+\begin{remark}\label{rem:seq_extension}
+    Along with allowing the summations to be performed homomorphically on the cloud, we note that this form of the FCI also allows the cloud's partial fusion operations to be evaluated sequentially. This can be seen in algorithm~\ref{alg:cloud_fus}, where individual components $s_{k,i}$, $\mat{C}_{k,i}$ and $\vec{e}_{k,i}$ from each estimator can continue to be aggregated as additional estimators send their estimate information. This, in turn, supports the dynamic joining and leaving of estimators in the network without affecting the cloud or the trusted third-party operations. The security implications of such an extension are discussed further in section~\ref{sec:security}.
+\end{remark}
 
 % 
 %  .d8888b.  8888888888 .d8888b.  
@@ -369,7 +377,8 @@ Along with allowing the summations to be performed homomorphically on the cloud,
 \section{Security Analysis}\label{sec:security}
 The provable security of the method in section~\ref{sec:encrypted_fci} is relatively straightforward. Our aim for IND-CPA security of all information received by the cloud, sent by the estimators or observable by eavesdroppers is achieved by the homomorphic Paillier encryption scheme. Since all transmitted information is encrypted and the cloud, estimators and eavesdroppers do not hold the secret key $\mathsf{sk}$, IND-CPA is met at all parties.
 
-We do, however, note an implicit assumption that is made when encrypting multidimensional data element-wise. While individual elements are indistinguishable, element-wise encryption does not encrypt the estimate dimension $n$, which remains implicitly public for all computations. While some methods that allow the complete homomorphic encryption of vectors do exist \cite{alexandruPrivateWeightedSum2020}, they are left for future work and considered beyond the scope of this work. Instead, we acknowledge the implicit leakage of state dimension $n$ and note that, while this may leak information about the fusion's use-case, state estimates themselves remain hidden.
+We note, however, an implicit assumption made when encrypting multidimensional data element-wise. While individual elements are indistinguishable, element-wise encryption does not encrypt the estimate dimension $n$, which remains implicitly public. While existing methods allow the complete homomorphic encryption of vectors \cite{alexandruPrivateWeightedSum2020}, they are left for future work and considered beyond the scope of this work. Instead, we acknowledge the implicit leakage of $n$ and note that, while this may leak information about the fusion's use-case, state estimates remain hidden. Additionally, intuitive extensions to the scheme, such as the dynamic joining and leaving of estimators in remark~\ref{rem:seq_extension}, may introduce further implicit leakages that must be considered if security is analysed. In this example, the periodic estimation may leak to the cloud when estimators are within estimation range or context, and a solution may be sending dummy measurements with $s_{k,i}=\mathcal{E}_{\mathsf{pk}}(\mathsf{E}_{N,\phi}(0))$ when estimator $i$ is out of range. This extension is presented only as an example of when care needs to be taken to maintain desired security goals, but in general, extensions and solutions are task-dependent and not a focus of this work.
+
 
 % 
 %  .d8888b. 8888888 888b     d888 
