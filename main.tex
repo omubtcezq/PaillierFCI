@@ -142,7 +142,7 @@ Data fusion and distributed state estimation have long been active fields of res
     %     % Third-party arrows
     %     \draw [latex-latex]  plot coordinates {(4.75,2.3)  (4.75,1.65)};
     % \end{tikzpicture}
-    \includegraphics{figures/illustration.pdf}%
+    \includegraphics[width=\columnwidth]{figures/illustration.pdf}%
     \caption{The participants, inputs and output of the considered fusion scenario.}\vspace{-\baselineskip}%
     \label{fig:layout}%
 \end{figure}%
@@ -454,6 +454,7 @@ with noise terms $\vec{v}_{k,i} \sim \mathcal{N}(\vec{0}, \mat{R}_i)$ and covari
 The fusion results of $1000$ simulation runs are shown in figure \ref{fig:sim_error_plot}. 
 \begin{figure}[htbp]
     \centering
+    \vspace{-\baselineskip}
     \includegraphics{figures/sim_error_plot.pdf}
     \caption{Average RMSE of encrypted and unencrypted FCI fusion over $1000$ simulations.}
     \label{fig:sim_error_plot}
