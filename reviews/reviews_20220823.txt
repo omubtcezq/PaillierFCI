@@ -1,0 +1,67 @@
+Paper ID: 29
+Paper Title: Encrypted Fast Covariance Intersection Without Leaking Fusion Weights
+
+
+#=====================#
+#===# Reviewer #5 #===#
+#=====================#
+
+
+This paper considers encrypted (conservative) fusion of estimates from m different estimators.
+The fusion process takes place in the cloud, which is assumed to be untrusted.
+To that end, an encrypted fusion algorithm that minimizes the amount of "leaked" information is presented and discussed.
+
+General Comments
+-----
+This is a well written, concise paper that is clear to the point with what it aims to achieve.
+Despite the conciseness, the authors manage to explain their algorithm and contribution in a satisfactory way, without going in to unnecessary details.
+Even though encrypted fusion is not my field of study, I felt that the underlying theory was well explained and it is made obvious why the algorithm works as expected.
+I have a few minor comments to think about.
+
+- I am curious about the computational aspects of your proposed algorithm.
+It is obvious that this is more secure than an unencrypted fusion, but what about the computational complexity?
+Are we sacrificing anything for the security?
+Further, in the unencrypted version, I assume that the cloud is able to provide the actual estimate, whereas now the burden of inversion is placed on the third party. If n is very large, this may be an issue depending on what the third party "is". A discussion on this may be valuable.
+
+- For Fig. 2, maybe a log-scale is better, seeing that we're trying to just see the relative difference between the encrypted and unencrypted versions.
+
+- I would refrain from saying "no leakage" given your implicit leakage of n. Instead, specify what information is kept private (or better, what information is not).
+
+
+#=====================#
+#===# Reviewer #7 #===#
+#=====================#
+
+
+The authors propose a technique for fast covariance intersection on an untrusted Cloud using Paillier encryption scheme involving a trusted third-party that queries for fused estimates from the Cloud.
+
+(a) The paper derives its core from "M. Ristic, B. Noack and U. D. Hanebeck, "Secure Fast Covariance Intersection Using Partially Homomorphic and Order Revealing Encryption Schemes," in IEEE Control Systems Letters, vol. 5, no. 1, pp. 217-222, Jan. 2021, doi: 10.1109/LCSYS.2020.3000649." and extends the proposed approach untrusted Cloud platforms to stop weight leakages in the Cloud. However, the proposed approach is only a marginal improvement over the existing work. The motivation behind the addressed problem is unclear. Under what scenarios are the leakages being treated as a threat? Isn't it very intuitive to hold operations unless a query is requested by the third party? In practical approaches, the Cloud generally holds the data before processing the fused information unless required by the third party. It is unclear how the proposed approach is novel in preventing the leakage.
+
+(b) The paper assumes that IND-CPA is accurate in encrypting the data shared by the estimators. However, IND-CPA maynot be accurate and can cause leakage of data/fused information. Authors must consider this while preventing the leakage.
+
+(c) The paper does not evaluate the proposed approach in-depth. (I) The proposed approach must be tested with higher number of estimators (1...N. Say N=10) to evaluate the proposed approach. (ii) The approach must also be tested under different weights and covariance conditions to evaluate the robustness of the approach (iii) It will be beneficial if the proposed approach is evaluated when proposed technique is evaluated under eveasdrop attacks.
+
+
+#=====================#
+#===# Reviewer #8 #===#
+#=====================#
+
+
+Review Comments
+
+Title: Encrypted Fast Covariance Intersection Without Leaking Fusion Weights
+Paper number: MFI 29
+
+General Comment
+
+This paper proposes an encrypted Fast Covariance Intersection method which doest not disclose individual estimates, fusion weights, or the fused results. The method developed in the paper leverages the Paillier encryption scheme, which allows homomorphic addition, into computation of Fast Covariance Intersection (FCI) algorithm. Compared with the benchmark previous study, the proposed algorithm is beneficial as the FCI algorithm can be calculated without leaking intermediate information to the untrusted cloud. The topic addressed in this paper interesting and could attract attention from a wide range of research communities. The paper is concise and very well written. The techniques developed sound and justified well. To this end, I believe this paper is very well suited with and a good addition to the MFI conference. Some comments and questions are given as follows:
+
+Comments
+
+    1. Isn’t there any scheme available, which doesn’t disclose individual estimates, fusion weights, or the fused results like the proposed method? Also, since [25] leaks the sum of weighted neighbouring states, that seems comparable to the one proposed in this paper. Isn’t this the case
+    
+    2. Define Z_N.
+    
+    3. The notation (mod N ) seems used for the modulo operation. However, I believe that this notation is typically used for the congruent modulo. This would be better to be clarified.
+
+    4. It seems that the proposed scheme can be implemented for other types of fusion algorithms like track-to-track fusion. If this is the case, it would be good to include a remark discussing this point.
