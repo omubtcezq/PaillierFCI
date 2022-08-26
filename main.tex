@@ -30,7 +30,7 @@
 \usepackage{amsfonts}
 %\usepackage{amsthm} % Errors from \proof when used with this ieeeconf
 \usepackage{mathtools}
-%\usepackage{flushend} % Sometimes breaks order of references
+\usepackage{flushend} % Sometimes breaks order of references
 % Algorithms
 \usepackage{algorithm}
 \usepackage{algpseudocode}
@@ -87,7 +87,7 @@ Encrypted Fast Covariance Intersection\\Without Leaking Fusion Weights
 %                                    
 % 
 \begin{abstract}
-    State estimate fusion is a common requirement in distributed sensor networks and can be complicated by untrusted participants or network eavesdroppers. We present a method for computing the common Fast Covariance Intersection fusion algorithm on an untrusted cloud without disclosing individual estimates or the fused result. In an existing solution to this problem, fusion weights corresponding to the sensor estimate errors are leaked to the cloud to perform the fusion. In this work, we present a method that guarantees no data identifying sensors or their estimated values is leaked to the cloud by requiring an additional computation step by the party querying the cloud for the fused result. The Paillier encryption scheme is used to homomorphically compute separate parts of the computation that can be combined after decryption. This encrypted Fast Covariance Intersection algorithm can be used in scenarios where the fusing cloud is not trusted and any information on sensor performances must remain confidential.
+    State estimate fusion is a common requirement in distributed sensor networks and can be complicated by untrusted participants or network eavesdroppers. We present a method for computing the common Fast Covariance Intersection fusion algorithm on an untrusted cloud without disclosing individual estimates or the fused result. In an existing solution to this problem, fusion weights corresponding to estimate errors are leaked to the cloud to perform the fusion. In this work, we present a method that guarantees no data identifying estimators or their estimated values is leaked to the cloud by requiring an additional computation step by the party querying the cloud for the fused result. The Paillier encryption scheme is used to homomorphically compute separate parts of the computation that can be combined after decryption. This encrypted Fast Covariance Intersection algorithm can be used in scenarios where the fusing cloud is not trusted and any information on estimator performances must remain confidential.
 \end{abstract}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -133,13 +133,13 @@ Data fusion and distributed state estimation have long been active fields of res
     %     \fill [pyplotorange!70] (4.25,2.75) ellipse (0.25 and 0.25);
     %     \fill [pyplotorange!70] (5.25,3) ellipse (0.25 and 0.25);
     %     \fill [pyplotorange!70] (4.25,2.5) rectangle (5.25,2.75);
-    %     % Third-party
-    %     \node at (4.75,1.25) {Trusted Third-party};
+    %     % Third party
+    %     \node at (4.75,1.25) {Trusted Third party};
     %     \fill [pyplotblue!70] (5.5,-0.25) -- (4,-0.25) -- (4.75,1);
     %     % Estimator arrows
     %     \draw [-latex]  plot coordinates {(3,5)  (4.25,4)};
     %     \draw [-latex]  plot coordinates {(6.5,5)  (5.25,4)};
-    %     % Third-party arrows
+    %     % Third party arrows
     %     \draw [latex-latex]  plot coordinates {(4.75,2.3)  (4.75,1.65)};
     % \end{tikzpicture}
     \includegraphics[width=\columnwidth]{figures/illustration.pdf}%
@@ -147,14 +147,14 @@ Data fusion and distributed state estimation have long been active fields of res
     \label{fig:layout}%
 \end{figure}%
 
-While effective and often efficient, these data fusion solutions have traditionally been performed on closed networks with trusted participants and inherently imply trust between sensors and estimators. In recent years, the ubiquity of distributed public networks has seen the additional challenges of security and privacy become increasingly relevant in distributed sensing environments and has led to an active field of research in providing security during data processing and fusion tasks \cite{renSecurityChallengesPublic2012,brennerSecretProgramExecution2011}. While one can ensure transmitted information is kept secret from eavesdroppers on untrusted networks by using common private and public key encryption schemes \cite{katzIntroductionModernCryptography2008}, tasks involving untrusted participants during computations present a greater challenge. Here, partial computations on encrypted data or the intended leakage of some results are often required or desired to arrive at the final result \cite{risticSecureFastCovariance2021,shiPrivacyPreservingAggregationTimeSeries2011,risticCryptographicallyPrivilegedState2022}. One common tool for achieving these requirements is homomorphic encryption \cite{gentryFullyHomomorphicEncryption2009,paillierPublicKeyCryptosystemsBased1999} which allows operations to be computed on encrypted numbers without decryption. The Pailler encryption scheme \cite{paillierPublicKeyCryptosystemsBased1999} allows homomorphic addition and is a frequent choice in fusion applications due to its applicability, simplicity and provable security. In \cite{alanwarPrOLocResilientLocalization2017}, the Paillier scheme is used to perform non-Bayesian measurement fusion with range-sensors without disclosing individual sensor locations or measurements, while in \cite{aristovEncryptedMultisensorInformation2018}, it is used to achieve similar security with a Kalman filter when measurements are linear and sensors form a hierarchical network. When paired with additional schemes that introduce some leakage, a wider variety of tasks can often be solved as well. The work in \cite{alexandruEncryptedCooperativeControl2019} uses private weighted sum aggregation together with the Paillier scheme to compute decentralised local control inputs while leaking only the sum of weighted neighbouring states, and in \cite{risticSecureFastCovariance2021}, an untrusted cloud can use order-revealing encryptions to compute and leak relative sensor accuracies allowing the homomorphic computation of the Fast Covariance Intersection algorithm.
+While effective and often efficient, these data fusion solutions have traditionally been performed on closed networks with trusted participants and inherently imply trust between estimators and fusers. In recent years, the ubiquity of distributed public networks has seen the additional challenges of security and privacy become increasingly relevant in distributed sensing environments and has led to an active field of research in providing security during data processing and fusion tasks \cite{renSecurityChallengesPublic2012,brennerSecretProgramExecution2011}. While one can ensure transmitted information is kept secret from eavesdroppers on untrusted networks by using common private and public key encryption schemes \cite{katzIntroductionModernCryptography2008}, tasks involving untrusted participants during computations present a greater challenge. Here, partial computations on encrypted data or the intended leakage of some results are often required or desired to arrive at the final result \cite{risticSecureFastCovariance2021,shiPrivacyPreservingAggregationTimeSeries2011,risticCryptographicallyPrivilegedState2022}. One common tool for achieving these requirements is homomorphic encryption \cite{gentryFullyHomomorphicEncryption2009,paillierPublicKeyCryptosystemsBased1999} which allows operations to be computed on encrypted numbers without decryption. The Pailler encryption scheme \cite{paillierPublicKeyCryptosystemsBased1999} allows homomorphic addition and is a frequent choice in fusion applications due to its applicability, simplicity and provable security. In \cite{alanwarPrOLocResilientLocalization2017}, the Paillier scheme is used to perform non-Bayesian measurement fusion with range-sensors without disclosing individual sensor locations or measurements, while in \cite{aristovEncryptedMultisensorInformation2018}, it is used to achieve similar security with a Kalman filter when measurements are linear and sensors form a hierarchical network. When paired with additional schemes that introduce some leakage, a wider variety of tasks can often be solved as well. The work in \cite{alexandruEncryptedCooperativeControl2019} uses private weighted sum aggregation together with the Paillier scheme to compute decentralised local control inputs while leaking only the sum of weighted neighbouring states to the fuser, and in \cite{risticSecureFastCovariance2021}, an untrusted cloud can use order-revealing encryptions to compute and leak relative sensor or estimator accuracies allowing the homomorphic computation of the Fast Covariance Intersection algorithm.
 
-In this work, we consider stochastic state estimate fusion on an untrusted cloud similar to \cite{risticSecureFastCovariance2021} but aim to fuse estimates without leaking sensor information at the cloud. Our contribution is a novel method for computing the Fast Covariance Intersection algorithm using only the Paillier encryption scheme and leaking no intermediate information to the untrusted cloud. While in some use cases, leaked relative sensor accuracies can be useful for prioritising sensor communications, this leakage inherently informs the cloud about sensor performances over time, disclosing the times when sensors are out of range or non-functioning and implicitly leaking information about the fused estimate. Therefore, the presented method finds application when all sensor information is considered sensitive and when the fusing cloud is not trusted.
+In this work, we consider stochastic state estimate fusion on an untrusted cloud similar to \cite{risticSecureFastCovariance2021} but aim to fuse estimates without leaking estimator information at the cloud. Our contribution is a novel method for computing the Fast Covariance Intersection algorithm using only the Paillier encryption scheme and leaking no intermediate estimator information to the untrusted cloud. While in some use cases, leaked relative estimate accuracies can be useful for prioritising communications, this leakage inherently informs the cloud about estimator performances over time, disclosing the times when estimators are out of range or non-functioning and implicitly leaking information about the fused estimate. Therefore, the presented method finds application in a variety of cases where the Fast Covariance Intersection is applicable (measurement fusion, estimate fusion, track-to-track fusion etc.) and when all estimate-dependent information is considered sensitive to an untrusted fusing cloud.
 
-Section~\ref{sec:problem} introduces the formal data fusion and security goals and section~\ref{sec:prelims} gives relevant preliminaries. Section~\ref{sec:encrypted_fci} introduces our method, before sections~\ref{sec:security} and \ref{sec:simulation} analyse its security and simulation results, respectively. Concluding remarks and future work are discussed in section~\ref{sec:conclusion}.
+Section~\ref{sec:problem} introduces the formal data fusion and security goals and section~\ref{sec:prelims} gives relevant preliminaries. Section~\ref{sec:encrypted_fci} introduces our method and analyses its complexity and security, before section~\ref{sec:simulation} presents simulation results. Concluding remarks and future work are discussed in section~\ref{sec:conclusion}.
 
 \subsection{Notation}
-Throughout this work, the following notation is used. Plain characters, $a$, denote scalars, underlined lowercase characters, $\vec{b}$, denote vectors and uppercase bold characters, $\mat{C}$, denote matrices. $\vec{0}$ denotes the zero vector, $\mat{C}^{-1}$ the matrix inverse and $\tr(\mat{C})$ the matrix trace. Encryption with a public key $\mathsf{pk}$ is denoted $\mathcal{E}_{\mathsf{pk}}(\cdot)$ and decryption with a private key $\mathsf{sk}$ is denoted $\mathcal{D}_{\mathsf{sk}}(\cdot)$, while integer encoding and decoding with parameters $M$ and $\phi$ are denoted $\mathsf{E}_{M,\phi}(\cdot)$ and $\mathsf{E}^{-1}_{M,\phi}(\cdot)$, respectively. All encryption and encoding operations on vectors or matrices are performed element-wise and the expression $\otimes_{i=1}^{m}\mat{C}_i$ is used to denote element-wise multiplication for multidimensional data. The function $\mathsf{lcm}(a_1,a_2)$ gives the lowest common denominator of integers $a_1$ and $a_2$, $\lfloor\cdot\rfloor$ denotes rounding towards zero and $\lfloor\cdot\rceil$ denotes rounding to the nearest integer. The set $\mathbb{Z}_N$ is the set of integers modulo $N$ and $\pmod{N}$ the associated modulo-$N$ operation.
+Throughout this work, the following notation is used. Plain characters, $a$, denote scalars, underlined lowercase characters, $\vec{b}$, denote vectors and uppercase bold characters, $\mat{C}$, denote matrices. $\vec{0}$ denotes the zero vector, $\mat{C}^{-1}$ the matrix inverse and $\tr(\mat{C})$ the matrix trace. Encryption with a public key $\mathsf{pk}$ is denoted $\mathcal{E}_{\mathsf{pk}}(\cdot)$ and decryption with a private key $\mathsf{sk}$ is denoted $\mathcal{D}_{\mathsf{sk}}(\cdot)$, while integer encoding and decoding with parameters $M$ and $\phi$ are denoted $\mathsf{E}_{M,\phi}(\cdot)$ and $\mathsf{E}^{-1}_{M,\phi}(\cdot)$, respectively. All encryption and encoding operations on vectors or matrices are performed element-wise and the expression $\otimes_{i=1}^{m}\mat{C}_i$ is used to denote element-wise multiplication for multidimensional data. The function $\mathsf{lcm}(a_1,a_2)$ gives the lowest common denominator of integers $a_1$ and $a_2$, $\lfloor\cdot\rfloor$ denotes rounding towards zero, $\lfloor\cdot\rceil$ denotes rounding to the nearest integer and the $\log{\cdot}$ function is assumed to be base-$2$. The set $\mathbb{Z}_N$ is the set of integers modulo $N$ and $\pmod{N}$ the associated modulo-$N$ operation.
 
 % 
 % 8888888b.  8888888b.   .d88888b.  888888b.   
@@ -180,7 +180,7 @@ respectively, at every timestep $k$. Our aim at every timestep is for all estima
 \end{equation}
 respectively, are computed and are consistent with the estimates in \eqref{eqn:ests_and_covs}.
 
-Simultaneously, we consider the desired security of the fusion process. The fusing cloud and estimators are treated as \textit{honest-but-curious}, that is, they follow protocols correctly but may use learned information for malicious gain, and a trusted third-party exists that can query the cloud at any timestep $k$ to obtain the fusion results in \eqref{eqn:fus_ests_and_covs}. We aim for the cloud, estimators and eavesdroppers to learn no additional information from observed estimates and fusions, \eqref{eqn:ests_and_covs} and \eqref{eqn:fus_ests_and_covs}, respectively, beyond their local estimates. To guarantee this, cryptographic \textit{Indistinguishability under the Chosen Plaintext Attack} (IND-CPA) \cite{katzIntroductionModernCryptography2008} is desired for all transmitted and processed information. This is in line with common security goals in the field and is suitable for homomorphic encryption. The communications of this scenario are summarised graphically in figure \ref{fig:layout}.
+Simultaneously, we consider the desired security of the fusion process. The fusing cloud and estimators are treated as \textit{honest-but-curious}, that is, they follow protocols correctly but may use learned information for malicious gain, and a trusted third party exists that can query the cloud at any timestep $k$ to obtain the fusion results in \eqref{eqn:fus_ests_and_covs}. We aim for the cloud, estimators and eavesdroppers to learn no additional information from observed estimates and fusions, \eqref{eqn:ests_and_covs} and \eqref{eqn:fus_ests_and_covs}, respectively, beyond their local estimates. To guarantee this, cryptographic \textit{Indistinguishability under the Chosen Plaintext Attack} (IND-CPA) \cite{katzIntroductionModernCryptography2008} is desired for all transmitted and processed information. This is in line with common security goals in the field and is suitable for homomorphic encryption. The communications of this scenario are summarised graphically in figure \ref{fig:layout}.
 
 % 
 % 8888888b.  8888888b.  8888888888 888      8888888 888b     d888 
@@ -283,7 +283,7 @@ Here, we note that when $M=N$, \eqref{eqn:encoding_add} coincides with the Paill
 %                                                                        
 % 
 \section{Encrypted Fast Covariance Intersection}\label{sec:encrypted_fci}
-With the problem and preliminaries introduced, we can now present our encrypted FCI method that leaks no information to the fusing cloud. The core idea behind the method is to postpone the evaluation of operations that cannot be performed homomorphically until partial results are queried and decrypted by the key-holding third-party. The remaining operations can then be evaluated on unencrypted inputs to produce the correct results.
+With the problem and preliminaries introduced, we can now present our encrypted FCI method that leaks no estimator information to the fusing cloud. The core idea behind the method is to postpone the evaluation of operations that cannot be performed homomorphically until partial results are queried and decrypted by the key-holding third party. The remaining operations can then be evaluated on unencrypted inputs to produce the correct results.
 
 First, we note that the FCI fusion equations \eqref{eqn:ci_cov_fusion} and \eqref{eqn:ci_est_fusion} can be rearranged and substituted with weights \eqref{eqn:fci_weights} to obtain the equations
 \begin{equation}\label{eqn:fci_cov_rearrange}
@@ -300,7 +300,7 @@ In this form, innermost summations
         &\qquad\sum_{i=1}^m\frac{1}{\tr(\mat{P}_{k,i})}\mat{P}_{k,i}^{-1}\hat{\vec{x}}_{k,i}
     \end{split}
 \end{equation}
-combine information from individual estimators $i$ and are computable homomorphically given suitable encryptions. Encryptions of these sums can then be decrypted by the key-holding third-party, before remaining inversions and multiplications in \eqref{eqn:fci_cov_rearrange} and \eqref{eqn:fci_est_rearrange} can be computed to obtain the final results. To depict this process, pseudocode for the encryption at estimators, fusion at the cloud and decryption by the third-party are provided in algorithms~\ref{alg:est_enc}, \ref{alg:cloud_fus} and \ref{alg:fus_query}, respectively.
+combine information from individual estimators $i$ and are computable homomorphically given suitable encryptions. Encryptions of these sums can then be decrypted by the key-holding third party, before remaining inversions and multiplications in \eqref{eqn:fci_cov_rearrange} and \eqref{eqn:fci_est_rearrange} can be computed to obtain the final results. To depict this process, pseudocode for the encryption at estimators, fusion at the cloud and decryption by the third party are provided in algorithms~\ref{alg:est_enc}, \ref{alg:cloud_fus} and \ref{alg:fus_query}, respectively.
 \begin{algorithm}[htbp]
 \caption{Estimator Encryption}\label{alg:est_enc}
 \begin{algorithmic}[1]
@@ -360,24 +360,45 @@ combine information from individual estimators $i$ and are computable homomorphi
 \end{algorithm}
 
 \begin{remark}\label{rem:seq_extension}
-    Along with allowing the summations to be performed homomorphically on the cloud, we note that this form of the FCI also allows the cloud's partial fusion operations to be evaluated sequentially. This can be seen in algorithm~\ref{alg:cloud_fus}, where individual components $s_{k,i}$, $\mat{C}_{k,i}$ and $\vec{e}_{k,i}$ from each estimator can continue to be aggregated as additional estimators send their estimate information. This, in turn, supports the dynamic joining and leaving of estimators in the network without affecting the cloud or the trusted third-party operations. The security implications of such an extension are discussed further in section~\ref{sec:security}.
+    Along with allowing the summations to be performed homomorphically on the cloud, we note that this form of the FCI also allows the cloud's partial fusion operations to be evaluated sequentially. This can be seen in algorithm~\ref{alg:cloud_fus}, where individual components $s_{k,i}$, $\mat{C}_{k,i}$ and $\vec{e}_{k,i}$ from each estimator can continue to be aggregated as additional estimators send their estimate information. This, in turn, supports the dynamic joining and leaving of estimators in the network without affecting the cloud or the operations of a trusted third party. The security implications of such an extension are discussed further in section~\ref{subsec:security}.
 \end{remark}
 
-% 
-%  .d8888b.  8888888888 .d8888b.  
-% d88P  Y88b 888       d88P  Y88b 
-% Y88b.      888       888    888 
-%  "Y888b.   8888888   888        
-%     "Y88b. 888       888        
-%       "888 888       888    888 
-% Y88b  d88P 888       Y88b  d88P 
-%  "Y8888P"  8888888888 "Y8888P"  
-%                                 
-%                                 
-%                                 
-% 
-\section{Security Analysis}\label{sec:security}
-The provable security of the method in section~\ref{sec:encrypted_fci} is relatively straightforward. Our aim for IND-CPA security of all information received by the cloud, sent by the estimators or observable by eavesdroppers is achieved by the homomorphic Paillier encryption scheme. Since all transmitted information is encrypted and the cloud, estimators and eavesdroppers do not hold the secret key $\mathsf{sk}$, IND-CPA is met at all parties.
+\subsection{Complexity}\label{subsec:complexity}
+The method described provides a level of security when relying on an untrusted cloud for fusing estimates. However, the added reliance on an encryption scheme and the additional computations at the third party intuitively increase the computational complexity of the algorithm and the required capabilities of participating parties. Here, we present the complexity of operations during fusion, required by each party at every timestep $k$. We assume encoding and decoding operations have complexity $O(1)$ (due to their comparative insignificance when compared to associated encryption and decryption operations) and use \cite{paillierPublicKeyCryptosystemsBased1999} to obtain the encryption complexities of the Paillier encryption scheme in table \ref{tab:enc_cmplx}, with security parameter $\lambda = \log{N}$.
+\begin{table}[tb]
+    \centering
+    \caption{Computation complexity of encryption operations.}
+    \label{tab:enc_cmplx}
+    \begin{tabular}{|c|c|}
+       \hline
+       \textbf{Operation} & \textbf{Complexity} \\ 
+       \hline
+       Encryption & $O(\log^3{N})$ \\ 
+       Decryption & $O(\log^3{N})$ \\ 
+       Addition & $O(\log^2{N})$ \\ 
+       Scalar mult. & $O(\log^3{N})$ \\ 
+       \hline
+    \end{tabular}
+ \end{table}
+In table \ref{tab:fus_cmplx}, we compare the complexities of the unencrypted FCI algorithm and the method presented in this work.
+\begin{table}[tb]
+    \centering
+    \caption{Computation complexity at parties during fusion.}
+    \label{tab:fus_cmplx}
+    \begin{tabular}{ |c|c|c| }
+       \hline
+        & \textbf{FCI} & \textbf{Our Method} \\ 
+       \hline
+       Estimator & $O(1)$ & $O\left(n^2\log^3{N}\right)$ \\ 
+       Fusion & $O(mn^3)$ & $O\left(mn^2\log^2{N}\right)$ \\ 
+       Third party & $O(1)$ & $O\left(n^2\log^3{N} + n^3\right)$ \\ 
+       \hline
+    \end{tabular}
+ \end{table}
+It can be seen that the burden of computation is greatly increased at the estimators and the third party, in particular when dimension $n$ is large and when a long encryption key $N$ is used. Naturally, an application of the proposed method would need to consider these requirements in terms of computation time and required hardware.
+
+\subsection{Security Analysis}\label{subsec:security}
+The provable security of the presented method is relatively straightforward. Our aim for IND-CPA security of all information received by the cloud, sent by the estimators or observable by eavesdroppers is achieved by the homomorphic Paillier encryption scheme. Since all transmitted information is encrypted and the cloud, estimators and eavesdroppers do not hold the secret key $\mathsf{sk}$, IND-CPA is met at all parties.
 
 We note, however, an implicit assumption made when encrypting multidimensional data element-wise. While individual elements are indistinguishable, element-wise encryption does not encrypt the estimate's dimension $n$, which remains implicitly public. While existing methods allow the complete homomorphic encryption of vectors \cite{alexandruPrivateWeightedSum2020}, they are left for future work and considered beyond the scope of this work. Instead, we acknowledge the implicit leakage of $n$ and note that, while this may leak information about the fusion's use case, state estimates remain hidden. Additionally, intuitive extensions to the scheme, such as the dynamic joining and leaving of estimators in remark~\ref{rem:seq_extension}, may introduce further implicit leakages that must be considered if security is analysed. In this example, the periodic estimation may leak to the cloud when estimators are within an estimation range or context, and a solution may be sending dummy measurements with $s_{k,i}=\mathcal{E}_{\mathsf{pk}}(\mathsf{E}_{N,\phi}(0))$ when estimator $i$ is out of range. This extension is presented only as an example of when care needs to be taken to maintain desired security goals, but in general, extensions and solutions are task-dependent and not a focus of this work.
 
@@ -396,7 +417,7 @@ We note, however, an implicit assumption made when encrypting multidimensional d
 %                                 
 % 
 \section{Simulation}\label{sec:simulation}
-Fusion estimates and error covariances from the encrypted FCI method in section~\ref{sec:encrypted_fci} differ from unencrypted FCI only when quantisation errors are large or summation overflow occurs. As stated in section~\ref{subsec:encoding}, when the Paillier modulus $N$ is large, these errors can often be considered negligible. In this section, we demonstrate this similarity in performance between the encrypted and unencrypted FCI fusion algorithms with a simulation. Code was written in the Python programming language, using the $\mathsf{phe}$ Paillier encryption scheme library \cite{PythonPaillier2013} and a $512$ bit length key (bit length of $N$). The simulation implements a linear constant velocity model,
+Fusion estimates and error covariances from the proposed encrypted FCI method differ from unencrypted FCI only when quantisation errors are large or summation overflows occur. As stated in section~\ref{subsec:encoding}, when the Paillier modulus $N$ is large, these errors can often be considered negligible. In this section, we demonstrate this similarity in performance between the encrypted and unencrypted FCI fusion algorithms with a simulation. Code was written in the Python programming language, using the $\mathsf{phe}$ Paillier encryption scheme library \cite{PythonPaillier2013} and a $512$ bit length key (bit length of $N$). The simulation implements a linear constant velocity model,
 \begin{equation}\label{eqn:sim_sys_model}
     \vec{x}_k =
     \begin{bmatrix}
@@ -475,7 +496,7 @@ From the figure, we can see the expected similarity in performance between the e
 %                                               
 % 
 \section{Conclusion}\label{sec:conclusion}
-In this work, we have presented a method for computing encrypted Fast Covariance Intersection homomorphically on an untrusted cloud and discussed its security guarantees. The method ensures no information leakage at the cloud, eavesdroppers or estimators and an accompanying simulation demonstrates its minimal effect on estimation performance when compared to the unencrypted algorithm. Applications include a variety of distributed fusion tasks when external fusing computations are required such as weather forecasting and vehicle localisation. Future work on the topic aims to extend the method to include multivariable encryption, hiding the dimension variable $n$, and generalising to decentralised environments where individual fusing parties are untrusted.
+In this work, we have presented a method for computing encrypted Fast Covariance Intersection homomorphically on an untrusted cloud and discussed its security guarantees. The method ensures no estimator information leakage at the cloud, eavesdroppers or other estimators and an accompanying simulation demonstrates its minimal effect on estimation performance when compared to the unencrypted algorithm. Applications include a variety of distributed fusion tasks when external fusing computations are required such as weather forecasting and vehicle localisation. Future work on the topic aims to extend the method to include multivariable encryption, hiding the dimension variable $n$, and generalising to decentralised environments where individual fusing parties are untrusted.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
